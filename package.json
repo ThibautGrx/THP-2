@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "precommit": "echo hello",
+    "precommit": "rubocop && annotate",
     "prepush": "rspec",
   },
   "dependencies": {
