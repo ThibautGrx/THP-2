@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  resource :lessons, except: %i[new edit]
+  resources :lessons, except: %i[new edit]
 end
