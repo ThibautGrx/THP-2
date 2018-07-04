@@ -12,5 +12,10 @@
 require 'rails_helper'
 
 RSpec.describe Lesson, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "is creatable" do
+    lesson = create(:lesson)
+    first_lesson = Lesson.first
+    expect(first_lesson.title).to eq(lesson.title)
+    expect(first_lesson.description).to eq(lesson.description)
+  end
 end
