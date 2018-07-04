@@ -1,7 +1,8 @@
 {
   "scripts": {
     "precommit": "rubocop && annotate",
-    "prepush": "rspec",
+    "prepush": "rspec"
+
   },
   "dependencies": {
     "husky": "^0.14.3"
