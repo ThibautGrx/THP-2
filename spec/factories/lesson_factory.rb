@@ -11,7 +11,7 @@
 
 FactoryBot.define do
   factory :lesson do
-    title { Faker::DrWho.catch_phrase }
+    title { Faker::Beer.name }
     description { Faker::ChuckNorris.fact }
   end
 end
