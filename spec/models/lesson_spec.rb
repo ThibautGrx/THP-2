@@ -24,5 +24,4 @@ RSpec.describe Lesson, type: :model do
 
   it { should validate_length_of(:title).is_at_most(50) }
   it { should validate_length_of(:description).is_at_most(300) }
-
 end
