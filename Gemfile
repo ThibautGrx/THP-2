@@ -1,8 +1,6 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.5.1'
-
 gem 'active_model_serializers', '~> 0.10.0'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.0'
@@ -31,6 +29,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'factory_bot_rails'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'rspec-rails', '~> 3.7'
   gem 'rubocop', require: false
@@ -45,7 +44,6 @@ group :development do
 end
 
 group :test do
-  gem 'factory_bot_rails'
   gem 'faker'
   gem 'shoulda-matchers', '~> 3.0'
 end
