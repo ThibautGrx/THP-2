@@ -77,38 +77,57 @@ RSpec.describe LessonsController, type: :controller do
 
     context 'lesson is valid' do
       it "update the lesson " do
-        expect{ subject }.to change{ lesson.reload.name }.to(name)
-        expect{ subject }.to change{ lesson.reload.description }.to(description)
+        expect{ subject }.to change{ lesson.reload.title }.to(title)
         expect(json_response[:title]).to eq(title)
-        expect(json_response[:description]).to eq(description)
         first_lesson = Lesson.first
         expect(first_lesson.title).to eq(title)
+        expect(response.status).to eq(201)
+      end
+      it "update the lesson " do
+        expect{ subject }.to change{ lesson.reload.description }.to(description)
+        expect(json_response[:description]).to eq(description)
+        first_lesson = Lesson.first
         expect(first_lesson.description).to eq(description)
         expect(response.status).to eq(201)
       end
     end
+  end
 
-    context 'title and descritpion are not  valid' do
-      let(:title) { nil }
-      let(:description) { nil }
-      it "fails because title&description = nil" do
-        expect{ subject }.not_to(change{ lesson.reload.name }.to(name))
-        expect{ subject }.not_to(change{ lesson.reload.description }.to(description))
-        expect(response.status).to eq(403)
-        expect(json_response[:errors][:title][0]).to eq("can't be blank")
-        expect(json_response[:errors][:description][0]).to eq("can't be blank")
-      end
+  describe "GET #index" do
+    let!(:lessons) { create_list(:lesson, 10) }
+
+    subject do
+      get :index
     end
 
-    context 'title and descritpion are not  valid' do
-      let(:title) { 'a' * 51 }
-      let(:description) { 'a' * 301 }
-      it "fails because title&description are too long" do
-        expect{ subject }.not_to(change{ lesson.reload.name }.to(name))
-        expect{ subject }.not_to(change{ lesson.reload.description }.to(description))
-        expect(response.status).to eq(403)
-        expect(json_response[:errors][:title][0]).to eq("is too long (maximum is 50 characters)")
-        expect(json_response[:errors][:description][0]).to eq("is too long (maximum is 300 characters)")
+    it "returns all the turtles" do
+      subject
+      expect(json_response.size).to eq(10)
+    end
+  end
+
+  describe "DELETE #destroy" do
+    let!(:lesson) { create(:lesson) }
+    let(:id) { lesson.id }
+
+    subject do
+      delete :destroy, params: { id: id }
+    end
+
+    it "delete the turtle" do
+      expect{ subject }.to change(Lesson, :count).from(1).to(0)
+    end
+
+    it "return 204" do
+      subject
+      expect(response.status).to eq(204)
+    end
+
+    context 'lesson doesn\'t exist' do
+      let(:id) { "79cfcc41-edcb-4f5f-91c9-3fb9b3733509" }
+      it 'return not found' do
+        subject
+        expect(response.status).to eq(404)
       end
     end
   end

@@ -12,9 +12,9 @@ class LessonsController < ApplicationController
   def create
     lesson = Lesson.create(create_params)
     if lesson.errors.empty?
-      render status: 201, json: lesson
+      render status: :created, json: lesson
     else
-      render status: 403, json: { errors: lesson.errors }
+      render status: :forbidden, json: { errors: lesson.errors }
     end
   end
 
@@ -22,9 +22,9 @@ class LessonsController < ApplicationController
     lesson = Lesson.find(params[:id])
     lesson.update(update_params)
     if lesson.errors.empty?
-      render json: lesson
+      render status: :created, json: lesson
     else
-      render json: { errors: lesson.errors }
+      render status: :forbidden, json: { errors: lesson.errors }
     end
   end
 
