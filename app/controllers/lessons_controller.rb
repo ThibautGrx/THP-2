@@ -12,9 +12,9 @@ class LessonsController < ApplicationController
   def create
     lesson = Lesson.create(create_params)
     if lesson.errors.empty?
-      render json: lesson
+      render status: 201, json: lesson
     else
-      render json: { errors: lesson.errors }
+      render status: 403, json: { errors: lesson.errors }
     end
   end
 
