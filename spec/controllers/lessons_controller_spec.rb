@@ -10,8 +10,8 @@ RSpec.describe LessonsController, type: :controller do
     context 'lesson is valid' do
       it "create the lesson " do
         expect{ subject }.to change(Lesson, :count).by(1)
-        expect(json_response[:title]).to eq(title)
-        expect(json_response[:description]).to eq(description)
+        expect(json_response[:lesson][:title]).to eq(title)
+        expect(json_response[:lesson][:description]).to eq(description)
         first_lesson = Lesson.first
         expect(first_lesson.title).to eq(title)
         expect(first_lesson.description).to eq(description)
@@ -50,9 +50,9 @@ RSpec.describe LessonsController, type: :controller do
 
     it "renders the lesson" do
       subject
-      expect(json_response[:id]).to eq(lesson.id)
-      expect(json_response[:title]).to eq(lesson.title)
-      expect(json_response[:description]).to eq(lesson.description)
+      expect(json_response[:lesson][:id]).to eq(lesson.id)
+      expect(json_response[:lesson][:title]).to eq(lesson.title)
+      expect(json_response[:lesson][:description]).to eq(lesson.description)
       expect(response.status).to eq(200)
     end
 
@@ -78,14 +78,14 @@ RSpec.describe LessonsController, type: :controller do
     context 'lesson is valid' do
       it "update the lesson " do
         expect{ subject }.to change{ lesson.reload.title }.to(title)
-        expect(json_response[:title]).to eq(title)
+        expect(json_response[:lesson][:title]).to eq(title)
         first_lesson = Lesson.first
         expect(first_lesson.title).to eq(title)
         expect(response.status).to eq(201)
       end
       it "update the lesson " do
         expect{ subject }.to change{ lesson.reload.description }.to(description)
-        expect(json_response[:description]).to eq(description)
+        expect(json_response[:lesson][:description]).to eq(description)
         first_lesson = Lesson.first
         expect(first_lesson.description).to eq(description)
         expect(response.status).to eq(201)
@@ -102,7 +102,7 @@ RSpec.describe LessonsController, type: :controller do
 
     it "returns all the turtles" do
       subject
-      expect(json_response.size).to eq(10)
+      expect(json_response[:lessons].size).to eq(10)
     end
   end
 
