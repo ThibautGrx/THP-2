@@ -34,5 +34,9 @@ module Thp2
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
     end
+
+    Raven.configure do |config|
+      config.dsn = 'https://7dd7bf5b4f3b4d6dadc8c578e440a172:685aedb9b81640a788f9d7ee013bbc84@sentry.io/1240152'
+    end
   end
 end
