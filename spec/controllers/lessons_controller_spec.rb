@@ -5,6 +5,10 @@ RSpec.describe LessonsController, type: :controller do
     let(:title) { Faker::Beer.name }
     let(:description) { Faker::ChuckNorris.fact }
 
+    before do
+      auth_me_please
+    end
+
     subject { post :create, params: { title: title, description: description } }
 
     context 'lesson is valid' do
@@ -46,6 +50,10 @@ RSpec.describe LessonsController, type: :controller do
     let(:lesson) { create(:lesson) }
     let(:id) { lesson.id }
 
+    before do
+      auth_me_please
+    end
+
     subject { get :show, params: { id: id } }
 
     it "renders the lesson" do
@@ -70,6 +78,10 @@ RSpec.describe LessonsController, type: :controller do
     let(:id) { lesson.id }
     let(:title) { Faker::Beer.name }
     let(:description) { Faker::ChuckNorris.fact }
+
+    before do
+      auth_me_please
+    end
 
     subject do
       patch :update, params: { id: id, title: title, description: description }
@@ -96,6 +108,10 @@ RSpec.describe LessonsController, type: :controller do
   describe "GET #index" do
     let!(:lessons) { create_list(:lesson, 10) }
 
+    before do
+      auth_me_please
+    end
+
     subject do
       get :index
     end
@@ -109,6 +125,10 @@ RSpec.describe LessonsController, type: :controller do
   describe "DELETE #destroy" do
     let!(:lesson) { create(:lesson) }
     let(:id) { lesson.id }
+
+    before do
+      auth_me_please
+    end
 
     subject do
       delete :destroy, params: { id: id }
