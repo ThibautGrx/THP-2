@@ -1,4 +1,12 @@
 require 'simplecov'
+SimpleCov.start('rails') do
+  add_filter do |source_file|
+    source_file.lines.count < 5
+  end
+  add_group 'Serializers', 'app/serializers'
+  minimum_coverage_by_file 90
+  minimum_coverage 95
+end
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
@@ -56,7 +64,9 @@ RSpec.configure do |config|
   # Filter lines from Rails gems in backtraces.
   config.filter_rails_from_backtrace!
   config.include FactoryBot::Syntax::Methods
+  config.include Devise::Test::ControllerHelpers, type: :controller
   config.include JsonHelper
+  config.include DeviseHelper
 
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
@@ -70,13 +80,4 @@ Shoulda::Matchers.configure do |config|
     # Choose one or more libraries:
     with.library :rails
   end
-end
-
-SimpleCov.start('rails') do
-  add_filter do |source_file|
-    source_file.lines.count < 5
-  end
-  add_group 'Serializers', 'app/serializers'
-  minimum_coverage_by_file 90
-  minimum_coverage 95
 end
