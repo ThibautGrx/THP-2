@@ -5,6 +5,8 @@ DeviseTokenAuth.setup do |config|
   # each request.
   # config.change_headers_on_each_request = true
 
+  config.secret_key = ENV['DEVISE_SECRET_KEY'] if Rails.env.production?
+
   # By default, users will need to re-authenticate after 2 weeks. This setting
   # determines how long tokens will remain valid after they are issued.
   # config.token_lifespan = 2.weeks
