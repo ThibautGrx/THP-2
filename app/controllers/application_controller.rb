@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+  include ActionController::RequestForgeryProtection
   include DeviseTokenAuth::Concerns::SetUserByToken
 
   rescue_from ActionController::ParameterMissing, with: :rescue_param_missing
@@ -16,4 +17,7 @@ class ApplicationController < ActionController::API
   def rescue_bad_params(exception)
     render json: { errors: exception.record.errors.full_messages }, status: :forbidden
   end
+
+  include Pundit
+  protect_from_forgery
 end
