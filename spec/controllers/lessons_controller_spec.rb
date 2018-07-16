@@ -29,8 +29,8 @@ RSpec.describe LessonsController, type: :controller do
       it "fails because title&description = nil" do
         expect{ subject }.not_to(change(Lesson, :count))
         expect(response.status).to eq(403)
-        expect(json_response[:errors][:title][0]).to eq("can't be blank")
-        expect(json_response[:errors][:description][0]).to eq("can't be blank")
+        expect(json_response[:errors][0]).to eq("Title can't be blank")
+        expect(json_response[:errors][1]).to eq("Description can't be blank")
       end
     end
 
@@ -40,8 +40,8 @@ RSpec.describe LessonsController, type: :controller do
       it "fails because title&description are too long" do
         expect{ subject }.not_to(change(Lesson, :count))
         expect(response.status).to eq(403)
-        expect(json_response[:errors][:title][0]).to eq("is too long (maximum is 50 characters)")
-        expect(json_response[:errors][:description][0]).to eq("is too long (maximum is 300 characters)")
+        expect(json_response[:errors][0]).to eq("Title is too long (maximum is 50 characters)")
+        expect(json_response[:errors][1]).to eq("Description is too long (maximum is 300 characters)")
       end
     end
   end
@@ -93,14 +93,14 @@ RSpec.describe LessonsController, type: :controller do
         expect(json_response[:lesson][:title]).to eq(title)
         first_lesson = Lesson.first
         expect(first_lesson.title).to eq(title)
-        expect(response.status).to eq(201)
+        expect(response.status).to eq(200)
       end
       it "update the lesson " do
         expect{ subject }.to change{ lesson.reload.description }.to(description)
         expect(json_response[:lesson][:description]).to eq(description)
         first_lesson = Lesson.first
         expect(first_lesson.description).to eq(description)
-        expect(response.status).to eq(201)
+        expect(response.status).to eq(200)
       end
     end
   end

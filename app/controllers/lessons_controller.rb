@@ -1,5 +1,5 @@
 class LessonsController < ApplicationController
-  # before_action :authenticate_user!
+  before_action :authenticate_user!
 
   def show
     lesson = Lesson.find(params[:id])
@@ -12,28 +12,19 @@ class LessonsController < ApplicationController
   end
 
   def create
-    lesson = Lesson.create(create_params)
-    if lesson.errors.empty?
-      render status: :created, json: lesson
-    else
-      render status: :forbidden, json: { errors: lesson.errors }
-    end
+    lesson = Lesson.create!(create_params)
+    render json: lesson, status: :created
   end
 
   def update
     lesson = Lesson.find(params[:id])
-    lesson.update(update_params)
-    if lesson.errors.empty?
-      render status: :created, json: lesson
-    else
-      render status: :forbidden, json: { errors: lesson.errors }
-    end
+    lesson.update!(update_params)
+    render json: lesson
   end
 
   def destroy
-    lesson = Lesson.find(params[:id])
-    lesson.destroy
-    render body: nil, status: :no_content
+    Lesson.find(params[:id]).delete
+    head :no_content
   end
 
   private
@@ -41,8 +32,5 @@ class LessonsController < ApplicationController
   def create_params
     params.permit(:title, :description)
   end
-
-  def update_params
-    params.permit(:title, :description)
-  end
+  alias_method :update_params, :create_params
 end
