@@ -9,8 +9,13 @@ RSpec.describe LessonsController, type: :controller do
       auth_me_please
     end
 
-    subject { post :create, params: { title: title, description: description } }
-
+    subject { post(:create, params: { lesson: params }) }
+    let(:params) do
+      {
+        title: title,
+        description: description
+      }
+    end
     context 'lesson is valid' do
       it "create the lesson " do
         expect{ subject }.to change(Lesson, :count).by(1)
@@ -42,6 +47,22 @@ RSpec.describe LessonsController, type: :controller do
         expect(response.status).to eq(403)
         expect(json_response[:errors][0]).to eq("Title is too long (maximum is 50 characters)")
         expect(json_response[:errors][1]).to eq("Description is too long (maximum is 300 characters)")
+      end
+    end
+  end
+
+  describe "POST create" do
+    before do
+      auth_me_please
+    end
+
+    subject { post(:create, params: {}) }
+
+    context 'it miss params' do
+      it "fails because title&description = nil" do
+        expect{ subject }.not_to(change(Lesson, :count))
+        expect(response.status).to eq(403)
+        expect(json_response[:errors][0]).to eq("param is missing or the value is empty: lesson")
       end
     end
   end
@@ -83,8 +104,12 @@ RSpec.describe LessonsController, type: :controller do
       auth_me_please
     end
 
-    subject do
-      patch :update, params: { id: id, title: title, description: description }
+    subject { patch(:update, params: { id: id, lesson: params }) }
+    let(:params) do
+      {
+        title: title,
+        description: description
+      }
     end
 
     context 'lesson is valid' do

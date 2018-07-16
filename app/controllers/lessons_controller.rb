@@ -1,5 +1,5 @@
 class LessonsController < ApplicationController
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
 
   def show
     lesson = Lesson.find(params[:id])
@@ -30,7 +30,7 @@ class LessonsController < ApplicationController
   private
 
   def create_params
-    params.permit(:title, :description)
+    params.require(:lesson).permit(:title, :description)
   end
   alias_method :update_params, :create_params
 end
