@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::API
   include ActionController::RequestForgeryProtection
   include DeviseTokenAuth::Concerns::SetUserByToken
+  protect_from_forgery
+  include Pundit
 
   rescue_from ActionController::ParameterMissing, with: :rescue_param_missing
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
@@ -18,6 +20,9 @@ class ApplicationController < ActionController::API
     render json: { errors: exception.record.errors.full_messages }, status: :forbidden
   end
 
-  include Pundit
-  protect_from_forgery
+  rescue_from Pundit::NotAuthorizedError, with: :not_authorized
+
+  def not_authorized
+    render json: { errors: "You are not authorized to perform this action." }, status: :unauthorized
+  end
 end

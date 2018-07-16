@@ -20,12 +20,13 @@ class LessonsController < ApplicationController
 
   def update
     lesson = Lesson.find(params[:id])
+    authorize lesson
     lesson.update!(update_params)
     render json: lesson
   end
 
   def destroy
-    Lesson.find(params[:id]).delete
+    authorize Lesson.find(params[:id]).delete
     head :no_content
   end
 

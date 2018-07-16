@@ -104,7 +104,7 @@ RSpec.describe LessonsController, type: :controller do
     let(:description) { Faker::ChuckNorris.fact }
 
     before do
-      auth_me_please
+      auth_me_please_as_creator(lesson)
     end
 
     subject { patch(:update, params: { id: id, lesson: params }) }
@@ -155,7 +155,7 @@ RSpec.describe LessonsController, type: :controller do
     let(:id) { lesson.id }
 
     before do
-      auth_me_please
+      auth_me_please_as_creator(lesson)
     end
 
     subject do
@@ -176,6 +176,37 @@ RSpec.describe LessonsController, type: :controller do
       it 'return not found' do
         subject
         expect(response.status).to eq(404)
+      end
+    end
+  end
+
+  describe "policies" do
+    let!(:lesson) { create(:lesson) }
+    let(:title) { Faker::Beer.name }
+    let(:id) { lesson.id }
+    let(:description) { Faker::ChuckNorris.fact }
+
+    before do
+      auth_me_please
+    end
+
+    let(:params) do
+      {
+        title: title,
+        description: description
+      }
+    end
+
+    context 'current user is not the creator' do
+      it "can't update" do
+        patch(:update, params: { id: id, lesson: params })
+        expect(json_response[:errors]).to eq('You are not authorized to perform this action.')
+        expect(response.status).to eq(401)
+      end
+      it "can't delete" do
+        delete :destroy, params: { id: id }
+        expect(json_response[:errors]).to eq('You are not authorized to perform this action.')
+        expect(response.status).to eq(401)
       end
     end
   end
