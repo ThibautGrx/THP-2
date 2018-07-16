@@ -33,4 +33,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          authentication_keys: %i[username email]
   include DeviseTokenAuth::Concerns::User
+
+  has_many :created_lessons,
+           class_name: "Lesson",
+           dependent: :destroy
 end

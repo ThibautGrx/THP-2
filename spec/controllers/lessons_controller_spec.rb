@@ -6,6 +6,7 @@ RSpec.describe LessonsController, type: :controller do
     let(:description) { Faker::ChuckNorris.fact }
 
     before do
+      test_user
       auth_me_please
     end
 
@@ -13,7 +14,9 @@ RSpec.describe LessonsController, type: :controller do
     let(:params) do
       {
         title: title,
-        description: description
+        description: description,
+        user_id: @test_user.id
+
       }
     end
     context 'lesson is valid' do
