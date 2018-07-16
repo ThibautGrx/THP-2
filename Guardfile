@@ -20,11 +20,11 @@ guard 'annotate' do
 
   # Uncomment the following line if you also want to run annotate anytime
   # a model file changes
-  # watch( 'app/models/**/*.rb' )
+  watch( 'app/models/**/*.rb' )
 
   # Uncomment the following line if you are running routes annotation
   # with the ":routes => true" option
-  # watch( 'config/routes.rb' )
+  watch( 'config/routes.rb' )
 end
 
 # Note: The cmd option is now required due to the increasing number of ways
