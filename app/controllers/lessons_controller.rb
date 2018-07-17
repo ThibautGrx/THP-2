@@ -12,9 +12,7 @@ class LessonsController < ApplicationController
   end
 
   def create
-    lesson = Lesson.new(create_params)
-    lesson.creator = current_user
-    lesson.save!
+    lesson = Lesson.create!(create_params.merge(creator: current_user))
     render json: lesson, status: :created
   end
 
