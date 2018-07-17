@@ -14,9 +14,7 @@ RSpec.describe LessonsController, type: :controller do
     let(:params) do
       {
         title: title,
-        description: description,
-        user_id: @test_user.id
-
+        description: description
       }
     end
     context 'lesson is valid' do
