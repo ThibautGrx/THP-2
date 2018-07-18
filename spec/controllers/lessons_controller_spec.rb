@@ -1,14 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe LessonsController, type: :controller do
+  before(:example) do
+    auth_me_please
+  end
+
   describe "POST create" do
     let(:title) { Faker::Beer.name }
     let(:description) { Faker::ChuckNorris.fact }
-
-    before do
-      test_user
-      auth_me_please
-    end
 
     subject { post(:create, params: { lesson: params }) }
     let(:params) do
@@ -53,10 +52,6 @@ RSpec.describe LessonsController, type: :controller do
   end
 
   describe "POST create" do
-    before do
-      auth_me_please
-    end
-
     subject { post(:create, params: {}) }
 
     context 'it miss params' do
@@ -71,10 +66,6 @@ RSpec.describe LessonsController, type: :controller do
   describe "GET show" do
     let(:lesson) { create(:lesson) }
     let(:id) { lesson.id }
-
-    before do
-      auth_me_please
-    end
 
     subject { get :show, params: { id: id } }
 
@@ -134,10 +125,6 @@ RSpec.describe LessonsController, type: :controller do
   describe "GET #index" do
     let!(:lessons) { create_list(:lesson, 10) }
 
-    before do
-      auth_me_please
-    end
-
     subject do
       get :index
     end
@@ -152,19 +139,23 @@ RSpec.describe LessonsController, type: :controller do
     let!(:lesson) { create(:lesson) }
     let(:id) { lesson.id }
 
-    before do
-      auth_me_please_as_creator(lesson)
-    end
-
     subject do
       delete :destroy, params: { id: id }
     end
 
+    it "can't delete the turtle when the user is not the creator" do
+      subject
+      expect(json_response[:errors]).to eq("You are not authorized to perform this action.")
+      expect(response.status).to eq(401)
+    end
+
     it "delete the turtle" do
+      auth_me_please_as_creator(lesson)
       expect{ subject }.to change(Lesson, :count).from(1).to(0)
     end
 
     it "return 204" do
+      auth_me_please_as_creator(lesson)
       subject
       expect(response.status).to eq(204)
     end
@@ -172,6 +163,7 @@ RSpec.describe LessonsController, type: :controller do
     context 'lesson doesn\'t exist' do
       let(:id) { "79cfcc41-edcb-4f5f-91c9-3fb9b3733509" }
       it 'return not found' do
+        auth_me_please_as_creator(lesson)
         subject
         expect(response.status).to eq(404)
       end
