@@ -1,12 +1,3 @@
-require 'simplecov'
-SimpleCov.start('rails') do
-  add_filter do |source_file|
-    source_file.lines.count < 5
-  end
-  add_group 'Serializers', 'app/serializers'
-  minimum_coverage_by_file 90
-  minimum_coverage 95
-end
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
