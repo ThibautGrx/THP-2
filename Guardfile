@@ -15,7 +15,7 @@
 #
 # and, you'll have to watch "config/Guardfile" instead of "Guardfile"
 
-guard 'annotate' do
+guard 'annotate', routes: 'after', serializers: false, factories: false, show_indexes: true do
   watch( 'db/schema.rb' )
 
   # Uncomment the following line if you also want to run annotate anytime
