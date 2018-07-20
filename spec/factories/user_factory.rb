@@ -2,7 +2,7 @@
 #
 # Table name: users
 #
-#  id                     :bigint(8)        not null, primary key
+#  id                     :uuid             not null, primary key
 #  provider               :string           default("email"), not null
 #  uid                    :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
@@ -25,6 +25,7 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
+
 require 'faker'
 
 FactoryBot.define do
@@ -38,6 +39,11 @@ FactoryBot.define do
 
     trait :confirmed do
       confirmed_at { 2.days.ago }
+    end
+    trait :with_lessons do
+      after(:create) do |user|
+        create_list(:lesson, Random.rand(1..4), creator: user)
+      end
     end
   end
 end

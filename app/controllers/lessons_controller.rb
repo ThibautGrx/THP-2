@@ -12,7 +12,7 @@ class LessonsController < ApplicationController
   end
 
   def create
-    lesson = Lesson.create!(create_params)
+    lesson = Lesson.create!(create_params.merge(creator: current_user))
     render json: lesson, status: :created
   end
 
@@ -30,7 +30,7 @@ class LessonsController < ApplicationController
   private
 
   def create_params
-    params.require(:lesson).permit(:title, :description)
+    params.require(:lesson).permit(:title, :description, :creator)
   end
   alias_method :update_params, :create_params
 end

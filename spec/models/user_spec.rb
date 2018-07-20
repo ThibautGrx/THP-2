@@ -2,7 +2,7 @@
 #
 # Table name: users
 #
-#  id                     :bigint(8)        not null, primary key
+#  id                     :uuid             not null, primary key
 #  provider               :string           default("email"), not null
 #  uid                    :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
@@ -39,6 +39,16 @@ RSpec.describe User, type: :model do
     expect(last_user.username).to eq(user.username)
     expect(last_user.email).to eq(user.email)
     expect(last_user.password).to be_blank
+  end
+
+  it "follows lessons link" do
+    user = create(:user, :with_lessons)
+    expect(User.last.lessons.first.creator).to eq(user)
+  end
+
+  it "cascade destroys its lessons" do
+    user = create(:user, :with_lessons)
+    expect{ user.destroy }.to change(Lesson, :count).to(0)
   end
 
   it "doesn't need confirmation" do

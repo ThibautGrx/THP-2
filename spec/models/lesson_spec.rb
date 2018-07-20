@@ -7,6 +7,7 @@
 #  description :text             not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  creator_id  :uuid
 #
 
 require 'rails_helper'
@@ -17,6 +18,11 @@ RSpec.describe Lesson, type: :model do
     first_lesson = Lesson.first
     expect(first_lesson.title).to eq(lesson.title)
     expect(first_lesson.description).to eq(lesson.description)
+  end
+
+  it "follows creator link" do
+    lesson = create(:lesson).reload
+    expect(lesson.creator.lessons.first).to eq(lesson)
   end
 
   it { is_expected.to validate_presence_of(:title) }
