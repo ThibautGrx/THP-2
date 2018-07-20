@@ -30,7 +30,16 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable,
-         authentication_keys: %i[username email]
+         :recoverable, :rememberable, :trackable, :validatable, :confirmable
   include DeviseTokenAuth::Concerns::User
+
+  validates :username, presence: true, uniqueness: { case_sensitive: false }
+
+  def as_json(opt = nil)
+    super({ only: %i[id username email confirmed_at uid provider] }.merge(opt.to_h))
+  end
+
+  def confirmation_required?
+    false
+  end
 end

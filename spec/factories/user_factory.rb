@@ -33,5 +33,11 @@ FactoryBot.define do
     username{ Faker::Internet.user_name }
     password { Faker::Internet.password(8) }
     password_confirmation { password }
+    provider "email"
+    uid "123"
+
+    trait :confirmed do
+      confirmed_at { 2.days.ago }
+    end
   end
 end

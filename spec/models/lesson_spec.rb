@@ -20,9 +20,9 @@ RSpec.describe Lesson, type: :model do
     expect(first_lesson.description).to eq(lesson.description)
   end
 
-  it { should validate_presence_of(:title) }
-  it { should validate_presence_of(:description) }
+  it { is_expected.to validate_presence_of(:title) }
+  it { is_expected.to validate_presence_of(:description) }
 
-  it { should validate_length_of(:title).is_at_most(50) }
-  it { should validate_length_of(:description).is_at_most(300) }
+  it { is_expected.to validate_length_of(:title).is_at_most(50) }
+  it { is_expected.to validate_length_of(:description).is_at_most(300) }
 end
