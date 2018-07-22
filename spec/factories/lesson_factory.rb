@@ -12,7 +12,6 @@
 
 FactoryBot.define do
   factory :lesson do
-    association :creator, factory: :user
     title { Faker::Beer.name }
     description { Faker::ChuckNorris.fact }
     creator { create(:user) }

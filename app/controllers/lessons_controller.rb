@@ -31,10 +31,7 @@ class LessonsController < ApplicationController
   private
 
   def create_params
-    params.require(:lesson).permit(:title, :description, :user_id)
-  end
-
-  def update_params
     params.require(:lesson).permit(:title, :description)
   end
+  alias_method :update_params, :create_params
 end
