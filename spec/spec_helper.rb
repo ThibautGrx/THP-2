@@ -5,6 +5,7 @@ if ENV['COVERAGE']
       source_file.lines.count < 7
     end
     add_group 'Serializers', 'app/serializers'
+    add_group 'Policies', 'app/policies'
   end
 
   SimpleCov.at_exit do
