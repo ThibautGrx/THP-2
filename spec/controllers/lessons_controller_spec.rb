@@ -1,183 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe LessonsController, type: :controller do
-  #   describe "POST create" do
-  #     let(:title) { Faker::Beer.name }
-  #     let(:description) { Faker::ChuckNorris.fact }
-  #
-  #     before do
-  #       auth_me_please
-  #     end
-  #
-  #     subject { post(:create, params: { lesson: params }) }
-  #     let(:params) do
-  #       {
-  #         title: title,
-  #         description: description
-  #       }
-  #     end
-  #     context 'lesson is valid' do
-  #       it "create the lesson " do
-  #         expect{ subject }.to change(Lesson, :count).by(1)
-  #         expect(json_response[:lesson][:title]).to eq(title)
-  #         expect(json_response[:lesson][:description]).to eq(description)
-  #         expect(json_response[:lesson][:creator]).to eq(test_user.as_json)
-  #         first_lesson = Lesson.first
-  #         expect(first_lesson.title).to eq(title)
-  #         expect(first_lesson.description).to eq(description)
-  #         expect(first_lesson.creator).to eq(test_user)
-  #         expect(response.status).to eq(201)
-  #       end
-  #     end
-  #
-  #     context 'title and descritpion are not  valid' do
-  #       let(:title) { nil }
-  #       let(:description) { nil }
-  #       it "fails because title&description = nil" do
-  #         expect{ subject }.not_to(change(Lesson, :count))
-  #         expect(response.status).to eq(403)
-  #         expect(json_response[:errors][0]).to eq("Title can't be blank")
-  #         expect(json_response[:errors][1]).to eq("Description can't be blank")
-  #       end
-  #     end
-  #
-  #     context 'title and descritpion are not  valid' do
-  #       let(:title) { 'a' * 51 }
-  #       let(:description) { 'a' * 301 }
-  #       it "fails because title&description are too long" do
-  #         expect{ subject }.not_to(change(Lesson, :count))
-  #         expect(response.status).to eq(403)
-  #         expect(json_response[:errors][0]).to eq("Title is too long (maximum is 50 characters)")
-  #         expect(json_response[:errors][1]).to eq("Description is too long (maximum is 300 characters)")
-  #       end
-  #     end
-  #   end
-  #
-  #   describe "POST create" do
-  #     before do
-  #       auth_me_please
-  #     end
-  #
-  #     subject { post(:create, params: {}) }
-  #
-  #     context 'it miss params' do
-  #       it "fails because title&description = nil" do
-  #         expect{ subject }.not_to(change(Lesson, :count))
-  #         expect(response.status).to eq(403)
-  #         expect(json_response[:errors][0]).to eq("param is missing or the value is empty: lesson")
-  #       end
-  #     end
-  #   end
-  #
-  #   describe "GET show" do
-  #     let(:lesson) { create(:lesson) }
-  #     let(:id) { lesson.id }
-  #
-  #     before do
-  #       auth_me_please
-  #     end
-  #
-  #     subject { get :show, params: { id: id } }
-  #
-  #     it "renders the lesson" do
-  #       subject
-  #       expect(json_response[:lesson][:id]).to eq(lesson.id)
-  #       expect(json_response[:lesson][:title]).to eq(lesson.title)
-  #       expect(json_response[:lesson][:description]).to eq(lesson.description)
-  #       expect(response.status).to eq(200)
-  #     end
-  #
-  #     context "the lesson doesn't exist" do
-  #       let(:id) { "79cfcc41-edcb-4f5f-91c9-3fb9b3733509" }
-  #       it "return not found" do
-  #         subject
-  #         expect(response.status).to eq(404)
-  #       end
-  #     end
-  #   end
-  #
-  #   describe "PATCH update" do
-  #     let!(:lesson) { create(:lesson) }
-  #     let(:id) { lesson.id }
-  #     let(:title) { Faker::Beer.name }
-  #     let(:description) { Faker::ChuckNorris.fact }
-  #
-  #     before do
-  #       auth_me_please
-  #     end
-  #
-  #     subject { patch(:update, params: { id: id, lesson: params }) }
-  #     let(:params) do
-  #       {
-  #         title: title,
-  #         description: description
-  #       }
-  #     end
-  #
-  #     context 'lesson is valid' do
-  #       it "update the lesson " do
-  #         expect{ subject }.to change{ lesson.reload.title }.to(title)
-  #         expect(json_response[:lesson][:title]).to eq(title)
-  #         first_lesson = Lesson.first
-  #         expect(first_lesson.title).to eq(title)
-  #         expect(response.status).to eq(200)
-  #       end
-  #       it "update the lesson " do
-  #         expect{ subject }.to change{ lesson.reload.description }.to(description)
-  #         expect(json_response[:lesson][:description]).to eq(description)
-  #         first_lesson = Lesson.first
-  #         expect(first_lesson.description).to eq(description)
-  #         expect(response.status).to eq(200)
-  #       end
-  #     end
-  #   end
-  #
-  #   describe "GET #index" do
-  #     let!(:lessons) { create_list(:lesson, 10) }
-  #
-  #     before do
-  #       auth_me_please
-  #     end
-  #
-  #     subject do
-  #       get :index
-  #     end
-  #
-  #     it "returns all the turtles" do
-  #       subject
-  #       expect(json_response[:lessons].size).to eq(10)
-  #     end
-  #   end
-  #
-  #   describe "DELETE #destroy" do
-  #     let!(:lesson) { create(:lesson) }
-  #     let(:id) { lesson.id }
-  #
-  #     before do
-  #       auth_me_please
-  #     end
-  #
-  #     subject do
-  #       delete :destroy, params: { id: id }
-  #     end
-  #
-  #     it "delete the turtle" do
-  #       expect{ subject }.to change(Lesson, :count).from(1).to(0)
-  #     end
-  #
-  #     it "return 204" do
-  #       subject
-  #       expect(response.status).to eq(204)
-  #     end
-  #
-  #     context 'lesson doesn\'t exist' do
-  #       let(:id) { "79cfcc41-edcb-4f5f-91c9-3fb9b3733509" }
-  #       it 'return not found' do
-  #         subject
-  #         expect(response.status).to eq(404)
-  #       end
-  #     end
-  #   end
   describe "#index" do
     let(:lessons) { create_list(:lesson, 5) }
 
@@ -284,6 +107,7 @@ RSpec.describe LessonsController, type: :controller do
 
   describe "#update" do
     let(:lesson) { create(:lesson) }
+    let(:user) { create(:user) }
     let(:id) { lesson.id }
     let(:title) { Faker::ChuckNorris.fact[0..49] }
     let(:description) { Faker::TwinPeaks.quote }
@@ -293,11 +117,10 @@ RSpec.describe LessonsController, type: :controller do
 
     context "when logged in" do
       it 'respond with 401 and error message' do
-        auth_me_please
-        p lesson.creator.id
-        p controller.current_user.id
+        auth_me_please_as(user)
         subject
-        p json_response
+        expect(json_response[:errors]).to eq("You are not authorized to perform this action.")
+        expect(response).to have_http_status(401)
       end
     end
 
@@ -305,21 +128,36 @@ RSpec.describe LessonsController, type: :controller do
       it 'can update a lesson' do
         auth_me_please_as_creator(lesson)
         subject
+        first_lesson = Lesson.first
+        expect(json_response[:lesson][:title]).to eq(first_lesson.title)
+        expect(json_response[:lesson][:description]).to eq(first_lesson.description)
+        expect(json_response[:lesson][:creator][:id]).to eq(controller.current_user.id)
+        expect(response).to have_http_status(200)
       end
     end
   end
 
   describe "#delete" do
-    context "when not logged in" do
-      it 'cannot delete a lesson'
-    end
+    let(:lesson) { create(:lesson) }
+    let(:user) { create(:user) }
+    let(:id) { lesson.id }
+    subject { delete :destroy, params: { id: id } }
 
     context "when logged in" do
-      it 'cannot delete a lesson'
+      it 'cannot delete a lesson' do
+        auth_me_please_as(user)
+        subject
+        expect(json_response[:errors]).to eq("You are not authorized to perform this action.")
+        expect(response).to have_http_status(401)
+      end
     end
 
     context "when logged in as creator" do
-      it 'can delete a lesson'
+      it 'can delete a lesson' do
+        auth_me_please_as_creator(lesson)
+        subject
+        expect(response).to have_http_status(204)
+      end
     end
   end
 end
