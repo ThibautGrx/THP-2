@@ -68,16 +68,8 @@ RSpec.describe User, type: :model do
   end
 
   describe '#validations' do
-<<<<<<< HEAD
-    it { should validate_presence_of(:email) }
-    it { should validate_presence_of(:password) }
-    it { should validate_confirmation_of(:password) }
-
-    it { should have_many(:created_lessons) }
-=======
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to validate_presence_of(:username) }
     it { is_expected.to validate_uniqueness_of(:username).case_insensitive }
->>>>>>> ca72ccb2324edbfa905051b10b2d420266879232
   end
 end

@@ -1,12 +1,11 @@
 class ApplicationController < ActionController::API
   include ActionController::RequestForgeryProtection
   include DeviseTokenAuth::Concerns::SetUserByToken
-<<<<<<< HEAD
+
   protect_from_forgery
   include Pundit
-=======
+
   before_action :configure_permitted_parameters, if: :devise_controller?
->>>>>>> ca72ccb2324edbfa905051b10b2d420266879232
 
   rescue_from ActionController::ParameterMissing, with: :rescue_param_missing
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
@@ -24,16 +23,15 @@ class ApplicationController < ActionController::API
     render json: { errors: exception.record.errors.full_messages }, status: :forbidden
   end
 
-<<<<<<< HEAD
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
 
   def not_authorized
     render json: { errors: "You are not authorized to perform this action." }, status: :unauthorized
-=======
+  end
+
   protected
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: %i[username email])
->>>>>>> ca72ccb2324edbfa905051b10b2d420266879232
   end
 end

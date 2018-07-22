@@ -33,11 +33,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
   include DeviseTokenAuth::Concerns::User
 
-<<<<<<< HEAD
-  has_many :created_lessons,
-           class_name: "Lesson",
-           dependent: :destroy
-=======
   validates :username, presence: true, uniqueness: { case_sensitive: false }
 
   has_many :lessons, foreign_key: 'creator_id', inverse_of: 'creator', dependent: :destroy
@@ -49,5 +44,4 @@ class User < ApplicationRecord
   def confirmation_required?
     false
   end
->>>>>>> ca72ccb2324edbfa905051b10b2d420266879232
 end
