@@ -7,12 +7,14 @@
 #  description :text             not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  user_id     :integer
+#  creator_id  :uuid
 #
+
 FactoryBot.define do
   factory :lesson do
     association :creator, factory: :user
     title { Faker::Beer.name }
     description { Faker::ChuckNorris.fact }
+    creator { create(:user) }
   end
 end

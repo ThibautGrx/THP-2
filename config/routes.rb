@@ -21,7 +21,11 @@ end
 #                           PUT    /auth(.:format)                                                                          devise_token_auth/registrations#update
 #                           DELETE /auth(.:format)                                                                          devise_token_auth/registrations#destroy
 #                           POST   /auth(.:format)                                                                          devise_token_auth/registrations#create
-#       auth_validate_token GET    /auth/validate_token(.:format)                                                           devise_token_auth/token_validations#validate_token
+#     new_user_confirmation GET    /auth/confirmation/new(.:format)                                                         devise_token_auth/confirmations#new
+#         user_confirmation GET    /auth/confirmation(.:format)                                                             devise_token_auth/confirmations#show
+#                           POST   /auth/confirmation(.:format)                                                             devise_token_auth/confirmations#create
+#       auth_validate_token POST   /auth/validate_token(.:format)                                                           devise_token_auth/token_validations#validate_token
+#        auth_password_edit POST   /auth/password/edit(.:format)                                                            devise_token_auth/passwords#edit
 #                   lessons GET    /lessons(.:format)                                                                       lessons#index
 #                           POST   /lessons(.:format)                                                                       lessons#create
 #                    lesson GET    /lessons/:id(.:format)                                                                   lessons#show {:id=>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/}

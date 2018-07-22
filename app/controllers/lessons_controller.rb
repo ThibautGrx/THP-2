@@ -31,10 +31,14 @@ class LessonsController < ApplicationController
   private
 
   def create_params
+<<<<<<< HEAD
     params.require(:lesson).permit(:title, :description, :user_id)
   end
 
   def update_params
     params.require(:lesson).permit(:title, :description)
+=======
+    params.require(:lesson).permit(:title, :description, :creator)
+>>>>>>> ca72ccb2324edbfa905051b10b2d420266879232
   end
 end

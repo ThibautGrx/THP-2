@@ -2,7 +2,7 @@
 #
 # Table name: users
 #
-#  id                     :bigint(8)        not null, primary key
+#  id                     :uuid             not null, primary key
 #  provider               :string           default("email"), not null
 #  uid                    :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
@@ -30,11 +30,24 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable,
-         authentication_keys: %i[username email]
+         :recoverable, :rememberable, :trackable, :validatable, :confirmable
   include DeviseTokenAuth::Concerns::User
 
+<<<<<<< HEAD
   has_many :created_lessons,
            class_name: "Lesson",
            dependent: :destroy
+=======
+  validates :username, presence: true, uniqueness: { case_sensitive: false }
+
+  has_many :lessons, foreign_key: 'creator_id', inverse_of: 'creator', dependent: :destroy
+
+  def as_json(opt = nil)
+    super({ only: %i[id username email confirmed_at uid provider] }.merge(opt.to_h))
+  end
+
+  def confirmation_required?
+    false
+  end
+>>>>>>> ca72ccb2324edbfa905051b10b2d420266879232
 end

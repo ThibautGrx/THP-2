@@ -21,9 +21,11 @@ RSpec.describe LessonsController, type: :controller do
         expect{ subject }.to change(Lesson, :count).by(1)
         expect(json_response[:lesson][:title]).to eq(title)
         expect(json_response[:lesson][:description]).to eq(description)
+        expect(json_response[:lesson][:creator]).to eq(test_user.as_json)
         first_lesson = Lesson.first
         expect(first_lesson.title).to eq(title)
         expect(first_lesson.description).to eq(description)
+        expect(first_lesson.creator).to eq(test_user)
         expect(response.status).to eq(201)
       end
     end

@@ -2,7 +2,7 @@
 #
 # Table name: users
 #
-#  id                     :bigint(8)        not null, primary key
+#  id                     :uuid             not null, primary key
 #  provider               :string           default("email"), not null
 #  uid                    :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
@@ -29,17 +29,55 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  subject do
+    create(:user, :confirmed)
+  end
+
   it "is creatable" do
     user = create(:user)
     last_user = User.last
     expect(last_user.username).to eq(user.username)
     expect(last_user.email).to eq(user.email)
+    expect(last_user.password).to be_blank
   end
+
+  it "follows lessons link" do
+    user = create(:user, :with_lessons)
+    expect(User.last.lessons.first.creator).to eq(user)
+  end
+
+  it "cascade destroys its lessons" do
+    user = create(:user, :with_lessons)
+    expect{ user.destroy }.to change(Lesson, :count).to(0)
+  end
+
+  it "doesn't need confirmation" do
+    expect(create(:user).confirmation_required?).to be_falsey
+  end
+
+  context "As devise_token_auth doesn't use serializers" do
+    it "returns the right fields in a JSON" do
+      user_json = JSON.parse(subject.to_json)
+      expect(user_json['id']).to eq(subject.id)
+      expect(user_json['uid']).to eq(subject.uid)
+      expect(user_json['email']).to eq(subject.email)
+      expect(user_json['username']).to eq(subject.username)
+      expect(user_json['provider']).to eq(subject.provider)
+      expect(user_json['confirmed_at']).to eq(subject.confirmed_at.as_json)
+    end
+  end
+
   describe '#validations' do
+<<<<<<< HEAD
     it { should validate_presence_of(:email) }
     it { should validate_presence_of(:password) }
     it { should validate_confirmation_of(:password) }
 
     it { should have_many(:created_lessons) }
+=======
+    it { is_expected.to validate_presence_of(:email) }
+    it { is_expected.to validate_presence_of(:username) }
+    it { is_expected.to validate_uniqueness_of(:username).case_insensitive }
+>>>>>>> ca72ccb2324edbfa905051b10b2d420266879232
   end
 end

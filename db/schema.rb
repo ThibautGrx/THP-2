@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2018_07_16_113056) do
+=======
+ActiveRecord::Schema.define(version: 2018_07_20_085912) do
+>>>>>>> ca72ccb2324edbfa905051b10b2d420266879232
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -21,10 +25,15 @@ ActiveRecord::Schema.define(version: 2018_07_16_113056) do
     t.text "description", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+<<<<<<< HEAD
     t.integer "user_id"
+=======
+    t.uuid "creator_id"
+    t.index ["creator_id"], name: "index_lessons_on_creator_id"
+>>>>>>> ca72ccb2324edbfa905051b10b2d420266879232
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -50,6 +59,8 @@ ActiveRecord::Schema.define(version: 2018_07_16_113056) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
+    t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "lessons", "users", column: "creator_id"
 end
