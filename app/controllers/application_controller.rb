@@ -1,5 +1,10 @@
 class ApplicationController < ActionController::API
+  include ActionController::RequestForgeryProtection
   include DeviseTokenAuth::Concerns::SetUserByToken
+
+  protect_from_forgery
+  include Pundit
+
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   rescue_from ActionController::ParameterMissing, with: :rescue_param_missing
@@ -16,6 +21,12 @@ class ApplicationController < ActionController::API
 
   def rescue_bad_params(exception)
     render json: { errors: exception.record.errors.full_messages }, status: :forbidden
+  end
+
+  rescue_from Pundit::NotAuthorizedError, with: :not_authorized
+
+  def not_authorized
+    render json: { errors: "You are not authorized to perform this action." }, status: :unauthorized
   end
 
   protected
