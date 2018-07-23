@@ -137,7 +137,7 @@ RSpec.describe LessonsController, type: :controller do
   end
 
   describe "#delete" do
-    let(:lesson) { create(:lesson) }
+    let!(:lesson) { create(:lesson) }
     let(:user) { create(:user) }
     let(:id) { lesson.id }
     subject { delete :destroy, params: { id: id } }
