@@ -31,7 +31,7 @@ RSpec.describe LessonsController, type: :controller do
     subject { get :show, params: { id: id } }
 
     context "when not logged in" do
-      it 'respond with 401 and error message' do
+      it 'respond with unauthorized and error message' do
         subject
         expect(json_response[:errors][0]).to eq("You need to sign in or sign up before continuing.")
         expect(response).to have_http_status(401)
@@ -51,7 +51,7 @@ RSpec.describe LessonsController, type: :controller do
 
       context "when ressource is not found" do
         let(:id) { "79cfcc41-edcb-4f5f-91c9-3fb9b3733509" }
-        it 'respond with 404 and message error' do
+        it 'respond with not found and message error' do
           expect(response).to have_http_status(404)
           expect(json_response[:errors][0][:detail]).to eq("Couldn't find Lesson with 'id'=79cfcc41-edcb-4f5f-91c9-3fb9b3733509")
         end
@@ -66,7 +66,7 @@ RSpec.describe LessonsController, type: :controller do
     subject { post :create, params: { lesson: { title: title, description: description } } }
 
     context "when not logged in" do
-      it 'respond with 401 and error message' do
+      it 'respond with unauthorized and error message' do
         subject
         expect(json_response[:errors][0]).to eq("You need to sign in or sign up before continuing.")
         expect(response).to have_http_status(401)
@@ -107,7 +107,6 @@ RSpec.describe LessonsController, type: :controller do
 
   describe "#update" do
     let(:lesson) { create(:lesson) }
-    let(:user) { create(:user) }
     let(:id) { lesson.id }
     let(:title) { Faker::ChuckNorris.fact[0..49] }
     let(:description) { Faker::TwinPeaks.quote }
@@ -116,8 +115,8 @@ RSpec.describe LessonsController, type: :controller do
     let(:params) { { title: title, description: description } }
 
     context "when logged in" do
-      it 'respond with 401 and error message' do
-        auth_me_please_as(user)
+      it 'respond with unauthorized and error message' do
+        auth_me_please
         subject
         expect(json_response[:errors]).to eq("You are not authorized to perform this action.")
         expect(response).to have_http_status(401)
@@ -145,7 +144,7 @@ RSpec.describe LessonsController, type: :controller do
 
     context "when logged in" do
       it 'cannot delete a lesson' do
-        auth_me_please_as(user)
+        auth_me_please
         subject
         expect(json_response[:errors]).to eq("You are not authorized to perform this action.")
         expect(response).to have_http_status(401)

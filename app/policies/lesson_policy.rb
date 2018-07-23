@@ -6,14 +6,6 @@ class LessonPolicy
     @lesson = lesson
   end
 
-  def show?
-    user
-  end
-
-  def create?
-    user
-  end
-
   def update?
     user == lesson.creator
   end
