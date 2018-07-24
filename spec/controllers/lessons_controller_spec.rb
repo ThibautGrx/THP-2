@@ -63,7 +63,7 @@ RSpec.describe LessonsController, type: :controller do
     let(:title) { Faker::ChuckNorris.fact[0..49] }
     let(:description) { Faker::TwinPeaks.quote }
 
-    subject { post :create, params: { lesson: { title: title } } }
+    subject { post :create, params: { lesson: { title: title, description: description } } }
 
     context "when not logged in" do
       it 'respond with unauthorized and error message' do
