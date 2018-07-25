@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2018_07_25_072009) do
   end
 
   create_table "invitations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.boolean "is_accepted"
+    t.boolean "accepted"
     t.uuid "user_id"
     t.uuid "classroom_id"
     t.datetime "created_at", null: false
