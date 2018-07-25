@@ -3,7 +3,7 @@
 # Table name: invitations
 #
 #  id           :uuid             not null, primary key
-#  is_accepted  :boolean
+#  accepted     :boolean
 #  user_id      :uuid
 #  classroom_id :uuid
 #  created_at   :datetime         not null
