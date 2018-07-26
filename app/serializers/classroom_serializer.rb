@@ -10,10 +10,6 @@
 #  updated_at  :datetime         not null
 #
 
-FactoryBot.define do
-  factory :classroom do
-    title { Faker::Beer.name }
-    description { Faker::ChuckNorris.fact }
-    lesson { create(:lesson) }
-  end
+class ClassroomSerializer < ActiveModel::Serializer
+  attributes :id, :title, :description, :lesson_id
 end

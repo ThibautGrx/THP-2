@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
+  ID_REGEX = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
   mount_devise_token_auth_for 'User', at: 'auth'
-  resources :lessons, except: %i[new edit], constraints: { id: /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/ }
+  resources :lessons, except: %i[new edit], constraints: { id: ID_REGEX } do
+    resources :classrooms, except: %i[new edit], constraints: { id: ID_REGEX }
+  end
 end
 
 # == Route Map
@@ -26,6 +29,12 @@ end
 #                           POST   /auth/confirmation(.:format)                                                             devise_token_auth/confirmations#create
 #       auth_validate_token POST   /auth/validate_token(.:format)                                                           devise_token_auth/token_validations#validate_token
 #        auth_password_edit POST   /auth/password/edit(.:format)                                                            devise_token_auth/passwords#edit
+#         lesson_classrooms GET    /lessons/:lesson_id/classrooms(.:format)                                                 classrooms#index {:lesson_id=>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/}
+#                           POST   /lessons/:lesson_id/classrooms(.:format)                                                 classrooms#create {:lesson_id=>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/}
+#          lesson_classroom GET    /lessons/:lesson_id/classrooms/:id(.:format)                                             classrooms#show {:id=>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/, :lesson_id=>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/}
+#                           PATCH  /lessons/:lesson_id/classrooms/:id(.:format)                                             classrooms#update {:id=>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/, :lesson_id=>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/}
+#                           PUT    /lessons/:lesson_id/classrooms/:id(.:format)                                             classrooms#update {:id=>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/, :lesson_id=>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/}
+#                           DELETE /lessons/:lesson_id/classrooms/:id(.:format)                                             classrooms#destroy {:id=>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/, :lesson_id=>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/}
 #                   lessons GET    /lessons(.:format)                                                                       lessons#index
 #                           POST   /lessons(.:format)                                                                       lessons#create
 #                    lesson GET    /lessons/:id(.:format)                                                                   lessons#show {:id=>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/}

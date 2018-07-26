@@ -12,5 +12,5 @@
 #
 
 class LessonSerializer < ActiveModel::Serializer
-  attributes :id, :title, :description, :created_at, :creator
+  attributes :id, :title, :description, :created_at, :classrooms
 end
