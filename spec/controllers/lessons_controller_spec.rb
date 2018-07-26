@@ -82,7 +82,7 @@ RSpec.describe LessonsController, type: :controller do
         first_lesson = Lesson.first
         expect(json_response[:lesson][:title]).to eq(first_lesson.title)
         expect(json_response[:lesson][:description]).to eq(first_lesson.description)
-        expect(json_response[:lesson][:creator][:id]).to eq(controller.current_user.id)
+        expect(json_response[:lesson][:creator_id]).to eq(controller.current_user.id)
         expect(response).to have_http_status(201)
       end
 
@@ -130,7 +130,7 @@ RSpec.describe LessonsController, type: :controller do
         first_lesson = Lesson.first
         expect(json_response[:lesson][:title]).to eq(first_lesson.title)
         expect(json_response[:lesson][:description]).to eq(first_lesson.description)
-        expect(json_response[:lesson][:creator][:id]).to eq(controller.current_user.id)
+        expect(json_response[:lesson][:creator_id]).to eq(controller.current_user.id)
         expect(response).to have_http_status(200)
       end
     end
