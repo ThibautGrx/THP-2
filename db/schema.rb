@@ -17,8 +17,8 @@ ActiveRecord::Schema.define(version: 2018_07_31_074705) do
   enable_extension "plpgsql"
 
   create_table "classrooms", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "title"
-    t.text "description"
+    t.string "title", limit: 50, null: false
+    t.text "description", null: false
     t.uuid "lesson_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 2018_07_31_074705) do
   end
 
   create_table "invitations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.boolean "accepted"
+    t.boolean "accepted", default: false
     t.uuid "user_id"
     t.uuid "classroom_id"
     t.datetime "created_at", null: false
@@ -42,13 +42,13 @@ ActiveRecord::Schema.define(version: 2018_07_31_074705) do
     t.text "description", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "creator_id"
     t.integer "user_id"
+    t.uuid "creator_id"
     t.index ["creator_id"], name: "index_lessons_on_creator_id"
   end
 
   create_table "questions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.text "body"
+    t.text "body", null: false
     t.uuid "classroom_id"
     t.uuid "user_id"
     t.datetime "created_at", null: false
@@ -58,8 +58,8 @@ ActiveRecord::Schema.define(version: 2018_07_31_074705) do
   end
 
   create_table "steps", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "title"
-    t.text "description"
+    t.string "title", limit: 50, null: false
+    t.text "description", null: false
     t.uuid "lesson_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
