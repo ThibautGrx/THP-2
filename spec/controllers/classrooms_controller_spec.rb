@@ -1,11 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe LessonsController, type: :controller do
+RSpec.describe ClassroomsController, type: :controller do
+  let!(:lesson) { create(:lesson, creator: test_user) }
+  let(:lesson_id) { lesson.id }
   describe "#index" do
-    subject { get :index }
+    subject { get :index, params: { lesson_id: lesson_id } }
 
     context "when not logged in" do
-      it 'cannot get all the lessons' do
+      it 'cannot get all the classrooms' do
         subject
         expect(json_response[:errors][0]).to eq("You need to sign in or sign up before continuing.")
         expect(response).to have_http_status(401)
@@ -17,11 +19,11 @@ RSpec.describe LessonsController, type: :controller do
         auth_me_please
       end
 
-      let(:lessons) { create_list(:lesson, 5) }
+      let(:classrooms) { create_list(:classroom, 5) }
 
-      it 'can get all the lessons' do
+      it 'can get all the classrooms' do
         subject
-        expect(json_response[:lessons].length).to eq(Lesson.count)
+        expect(json_response[:classrooms].length).to eq(Classroom.count)
       end
 
       it "returns a 200" do
@@ -32,10 +34,10 @@ RSpec.describe LessonsController, type: :controller do
   end
 
   describe "#show" do
-    subject { get :show, params: { id: id } }
+    subject { get :show, params: { id: id, lesson_id: lesson_id } }
 
-    let(:lesson) { create(:lesson, :with_classrooms) }
-    let(:id) { lesson.id }
+    let(:classroom) { create(:classroom, lesson: lesson) }
+    let(:id) { classroom.id }
 
     context "when not logged in" do
       it 'respond with unauthorized and error message' do
@@ -50,13 +52,13 @@ RSpec.describe LessonsController, type: :controller do
         auth_me_please
       end
       context "the id exist" do
-        it 'returns the lesson' do
+        it 'returns the classroom' do
           subject
-          expect(json_response[:lesson][:id]).to eq(lesson.id)
-          expect(json_response[:lesson][:title]).to eq(lesson.title)
-          expect(json_response[:lesson][:description]).to eq(lesson.description)
-          expect(json_response[:lesson][:creator_id]).to eq(lesson.creator_id)
-          expect(json_response[:lesson][:classrooms]).to eq(lesson.classrooms.pluck(:id))
+          expect(json_response[:classroom][:id]).to eq(classroom.id)
+          expect(json_response[:classroom][:title]).to eq(classroom.title)
+          expect(json_response[:classroom][:description]).to eq(classroom.description)
+          expect(json_response[:classroom][:creator_id]).to eq(classroom.creator_id)
+          expect(json_response[:classroom][:lesson_id]).to eq(classroom.lesson_id)
         end
         it "returns a 200" do
           subject
@@ -68,14 +70,14 @@ RSpec.describe LessonsController, type: :controller do
         it 'respond with not found and message error' do
           subject
           expect(response).to have_http_status(404)
-          expect(json_response[:errors][0][:detail]).to eq("Couldn't find Lesson with 'id'=#{id}")
+          expect(json_response[:errors][0][:detail]).to eq("Couldn't find Classroom with 'id'=#{id}")
         end
       end
     end
   end
 
   describe "#create" do
-    subject { post :create, params: { lesson: { title: title, description: description } } }
+    subject { post :create, params: { lesson_id: lesson_id, classroom: { title: title, description: description } } }
 
     let(:title) { Faker::ChuckNorris.fact[0..49] }
     let(:description) { Faker::TwinPeaks.quote }
@@ -96,24 +98,24 @@ RSpec.describe LessonsController, type: :controller do
         expect(response).to have_http_status(201)
       end
 
-      it "returns the new lesson" do
+      it "returns the new classroom" do
         subject
-        expect(json_response[:lesson][:id]).not_to be_blank
-        expect(json_response[:lesson][:title]).to eq(title)
-        expect(json_response[:lesson][:description]).to eq(description)
+        expect(json_response[:classroom][:id]).not_to be_blank
+        expect(json_response[:classroom][:title]).to eq(title)
+        expect(json_response[:classroom][:description]).to eq(description)
       end
 
-      it "creates the lesson" do
-        expect{ subject }.to change(Lesson, :count).by(1)
+      it "creates the classroom" do
+        expect{ subject }.to change(Classroom, :count).by(1)
       end
 
       it "sets the creator to current_user" do
         subject
-        expect(json_response[:lesson][:creator_id]).to eq(controller.current_user.id)
+        expect(json_response[:classroom][:creator_id]).to eq(controller.current_user.id)
       end
 
-      context "lesson is missing from params" do
-        subject { post :create, params: {} }
+      context "classrooms is missing from params" do
+        subject { post :create, params: { lesson_id: lesson_id } }
         it "returns a 403" do
           subject
           expect(response).to have_http_status(403)
@@ -121,12 +123,12 @@ RSpec.describe LessonsController, type: :controller do
 
         it "returns a readable error" do
           subject
-          expect(json_response[:errors][0]).to eq("param is missing or the value is empty: lesson")
+          expect(json_response[:errors][0]).to eq("param is missing or the value is empty: classroom")
         end
       end
 
       context "if title is missing" do
-        subject { post :create, params: { lesson: { title: nil, description: description } } }
+        subject { post :create, params: { classroom: { title: nil, description: description }, lesson_id: lesson_id } }
         it "returns a 403" do
           subject
           expect(response).to have_http_status(403)
@@ -165,12 +167,11 @@ RSpec.describe LessonsController, type: :controller do
       end
     end
   end
-
   describe "#update" do
-    subject { patch :update, params: { id: id, lesson: params } }
+    subject { patch :update, params: { id: id, classroom: params, lesson_id: lesson_id } }
     let(:params) { { title: title, description: description } }
-    let!(:lesson) { create(:lesson, creator: user) }
-    let(:id) { lesson.id }
+    let!(:classroom) { create(:classroom, creator: user) }
+    let(:id) { classroom.id }
     let(:title) { Faker::ChuckNorris.fact[0..49] }
     let(:description) { Faker::TwinPeaks.quote }
     let(:user) { test_user }
@@ -201,16 +202,16 @@ RSpec.describe LessonsController, type: :controller do
         expect(response).to have_http_status(200)
       end
 
-      it "returns the updated lesson" do
+      it "returns the updated classroom" do
         subject
-        expect(json_response[:lesson][:id]).to eq(id)
-        expect(json_response[:lesson][:title]).to eq(title)
-        expect(json_response[:lesson][:description]).to eq(description)
+        expect(json_response[:classroom][:id]).to eq(id)
+        expect(json_response[:classroom][:title]).to eq(title)
+        expect(json_response[:classroom][:description]).to eq(description)
       end
 
-      it "updates the lesson" do
-        expect{ subject }.to change{ lesson.reload.title }.to(title).and(
-          change{ lesson.reload.description }.to(description)
+      it "updates the classroom" do
+        expect{ subject }.to change{ classroom.reload.title }.to(title).and(
+          change{ classroom.reload.description }.to(description)
         )
       end
 
@@ -225,14 +226,14 @@ RSpec.describe LessonsController, type: :controller do
   end
 
   describe "#delete" do
-    subject { delete :destroy, params: { id: id } }
+    subject { delete :destroy, params: { id: id, lesson_id: lesson_id } }
 
-    let!(:lesson) { create(:lesson, creator: user) }
-    let(:id) { lesson.id }
+    let!(:classroom) { create(:classroom, creator: user) }
+    let(:id) { classroom.id }
     let(:user) { test_user }
 
     context "user is not logged in" do
-      it 'cannot delete a lesson' do
+      it 'cannot delete a classroom' do
         subject
         expect(json_response[:errors][0]).to eq("You need to sign in or sign up before continuing.")
         expect(response).to have_http_status(401)
@@ -255,7 +256,7 @@ RSpec.describe LessonsController, type: :controller do
       context "the id exist" do
         context "the user is not the creator" do
           let(:user) { create(:user) }
-          it "can't delete the lesson" do
+          it "can't delete the classroom" do
             subject
             expect(response).to have_http_status(401)
           end
@@ -266,15 +267,9 @@ RSpec.describe LessonsController, type: :controller do
             subject
             expect(response).to have_http_status(204)
           end
-          it "delete the lesson" do
+          it "delete the classroom" do
             subject
             expect(response).to have_http_status(204)
-          end
-          context "the lesson has classroom" do
-            let!(:lesson) { create(:lesson, :with_classrooms, creator: user) }
-            it "delete all classrooms" do
-              expect{ subject }.to change(Classroom, :count).to(0)
-            end
           end
         end
       end

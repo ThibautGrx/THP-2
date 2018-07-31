@@ -40,9 +40,16 @@ FactoryBot.define do
     trait :confirmed do
       confirmed_at { 2.days.ago }
     end
+
     trait :with_lessons do
       after(:create) do |user|
         create_list(:lesson, Random.rand(1..4), creator: user)
+      end
+    end
+
+    trait :with_classrooms do
+      after(:create) do |user|
+        create_list(:classroom, Random.rand(1..4), creator: user)
       end
     end
   end

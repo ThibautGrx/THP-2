@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'auth'
-  resources :lessons, except: %i[new edit], constraints: { id: /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/ }
+  resources :lessons, except: %i[new edit] do
+    resources :classrooms, except: %i[new edit]
+  end
 end
 
 # == Route Map
@@ -26,12 +28,18 @@ end
 #                           POST   /auth/confirmation(.:format)                                                             devise_token_auth/confirmations#create
 #       auth_validate_token POST   /auth/validate_token(.:format)                                                           devise_token_auth/token_validations#validate_token
 #        auth_password_edit POST   /auth/password/edit(.:format)                                                            devise_token_auth/passwords#edit
+#         lesson_classrooms GET    /lessons/:lesson_id/classrooms(.:format)                                                 classrooms#index
+#                           POST   /lessons/:lesson_id/classrooms(.:format)                                                 classrooms#create
+#          lesson_classroom GET    /lessons/:lesson_id/classrooms/:id(.:format)                                             classrooms#show
+#                           PATCH  /lessons/:lesson_id/classrooms/:id(.:format)                                             classrooms#update
+#                           PUT    /lessons/:lesson_id/classrooms/:id(.:format)                                             classrooms#update
+#                           DELETE /lessons/:lesson_id/classrooms/:id(.:format)                                             classrooms#destroy
 #                   lessons GET    /lessons(.:format)                                                                       lessons#index
 #                           POST   /lessons(.:format)                                                                       lessons#create
-#                    lesson GET    /lessons/:id(.:format)                                                                   lessons#show {:id=>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/}
-#                           PATCH  /lessons/:id(.:format)                                                                   lessons#update {:id=>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/}
-#                           PUT    /lessons/:id(.:format)                                                                   lessons#update {:id=>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/}
-#                           DELETE /lessons/:id(.:format)                                                                   lessons#destroy {:id=>/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/}
+#                    lesson GET    /lessons/:id(.:format)                                                                   lessons#show
+#                           PATCH  /lessons/:id(.:format)                                                                   lessons#update
+#                           PUT    /lessons/:id(.:format)                                                                   lessons#update
+#                           DELETE /lessons/:id(.:format)                                                                   lessons#destroy
 #        rails_service_blob GET    /rails/active_storage/blobs/:signed_id/*filename(.:format)                               active_storage/blobs#show
 # rails_blob_representation GET    /rails/active_storage/representations/:signed_blob_id/:variation_key/*filename(.:format) active_storage/representations#show
 #        rails_disk_service GET    /rails/active_storage/disk/:encoded_key/*filename(.:format)                              active_storage/disk#show

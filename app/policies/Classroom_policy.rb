@@ -1,4 +1,4 @@
-class LessonPolicy < ApplicationPolicy
+class ClassroomPolicy < ApplicationPolicy
   def update?
     record.creator == user
   end

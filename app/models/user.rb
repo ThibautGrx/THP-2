@@ -36,6 +36,18 @@ class User < ApplicationRecord
   validates :username, presence: true, uniqueness: { case_sensitive: false }
 
   has_many :lessons, foreign_key: 'creator_id', inverse_of: 'creator', dependent: :destroy
+  has_many :classrooms, foreign_key: 'creator_id', inverse_of: 'creator', dependent: :destroy
+
+  has_many :invitations, dependent: :destroy
+  has_many :votes, dependent: :destroy
+  has_many :upvoted_questions, through: :votes, source: :question
+  has_many :ticked_steps, dependent: :destroy
+  has_many :understood_steps, through: :ticked_steps, source: :step
+
+  #  def understood_step(classroom)
+  #    step_ids = ticked_steps.select{ |item| item.classroom == classroom }.map(&:user_id)
+  #    Step.where(id: step_ids)
+  #  end
 
   def as_json(opt = nil)
     super({ only: %i[id username email confirmed_at uid provider] }.merge(opt.to_h))
