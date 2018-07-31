@@ -43,11 +43,15 @@ RSpec.describe User, type: :model do
 
   it "follows lessons link" do
     user = create(:user, :with_lessons)
+    p user.username
+    p User.last.username
     expect(User.last.lessons.first.creator).to eq(user)
   end
 
   it "follows classroom link" do
     user = create(:user, :with_classrooms)
+    p user.username
+    p User.last.username
     expect(User.last.classrooms.first.creator).to eq(user)
   end
 

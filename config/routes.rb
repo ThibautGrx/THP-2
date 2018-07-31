@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'auth'
-  resources :lessons, except: %i[new edit]
+  resources :lessons, except: %i[new edit] do
+    resources :classrooms, except: %i[new edit]
+  end
 end
 
 # == Route Map
@@ -26,6 +28,12 @@ end
 #                           POST   /auth/confirmation(.:format)                                                             devise_token_auth/confirmations#create
 #       auth_validate_token POST   /auth/validate_token(.:format)                                                           devise_token_auth/token_validations#validate_token
 #        auth_password_edit POST   /auth/password/edit(.:format)                                                            devise_token_auth/passwords#edit
+#         lesson_classrooms GET    /lessons/:lesson_id/classrooms(.:format)                                                 classrooms#index
+#                           POST   /lessons/:lesson_id/classrooms(.:format)                                                 classrooms#create
+#          lesson_classroom GET    /lessons/:lesson_id/classrooms/:id(.:format)                                             classrooms#show
+#                           PATCH  /lessons/:lesson_id/classrooms/:id(.:format)                                             classrooms#update
+#                           PUT    /lessons/:lesson_id/classrooms/:id(.:format)                                             classrooms#update
+#                           DELETE /lessons/:lesson_id/classrooms/:id(.:format)                                             classrooms#destroy
 #                   lessons GET    /lessons(.:format)                                                                       lessons#index
 #                           POST   /lessons(.:format)                                                                       lessons#create
 #                    lesson GET    /lessons/:id(.:format)                                                                   lessons#show

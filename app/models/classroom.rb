@@ -29,7 +29,7 @@ class Classroom < ApplicationRecord
   has_many :steps, through: :ticked_steps
 
   belongs_to :lesson
-  belongs_to :creator, class_name: 'User', inverse_of: 'lessons'
+  belongs_to :creator, class_name: 'User', inverse_of: 'classrooms'
 
   validates :title, presence: true, length: { maximum: 50 }
   validates :description, presence: true, length: { maximum: 300 }
