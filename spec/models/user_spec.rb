@@ -46,6 +46,11 @@ RSpec.describe User, type: :model do
     expect(User.last.lessons.first.creator).to eq(user)
   end
 
+  it "follows classroom link" do
+    user = create(:user, :with_classrooms)
+    expect(User.last.classrooms.first.creator).to eq(user)
+  end
+
   it "cascade destroys its lessons" do
     user = create(:user, :with_lessons)
     expect{ user.destroy }.to change(Lesson, :count).to(0)

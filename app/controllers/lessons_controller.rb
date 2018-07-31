@@ -17,18 +17,22 @@ class LessonsController < ApplicationController
   end
 
   def update
-    lesson = Lesson.find(params[:id])
-    authorize lesson
-    lesson.update!(update_params)
-    render json: lesson
+    authorize current_lesson
+    current_lesson.update!(update_params)
+    render json: current_lesson
   end
 
   def destroy
-    authorize Lesson.find(params[:id]).delete
+    authorize current_lesson
+    current_lesson.destroy
     head :no_content
   end
 
   private
+
+  def current_lesson
+    @current_lesson ||= Lesson.find(params[:id])
+  end
 
   def create_params
     params.require(:lesson).permit(:title, :description)

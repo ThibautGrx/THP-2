@@ -8,10 +8,10 @@
 #  lesson_id   :uuid
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  creator_id  :uuid
 #
 
 class Classroom < ApplicationRecord
-  belongs_to :lesson
   has_many :invitations, dependent: :destroy
   has_many :accepted_invitations,
            -> { where "accepted = true" },
@@ -28,6 +28,10 @@ class Classroom < ApplicationRecord
   has_many :ticked_steps, dependent: :destroy
   has_many :steps, through: :ticked_steps
 
+  belongs_to :lesson
+  belongs_to :creator, class_name: 'User', inverse_of: 'lessons'
+
   validates :title, presence: true, length: { maximum: 50 }
   validates :description, presence: true, length: { maximum: 300 }
+  validates :lesson, presence: true
 end

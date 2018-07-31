@@ -12,5 +12,6 @@
 #
 
 class LessonSerializer < ActiveModel::Serializer
-  attributes :id, :title, :description, :created_at, :creator
+  attributes :id, :title, :description, :created_at, :creator_id
+  attribute(:classrooms) { object.classrooms.pluck(:id) }
 end

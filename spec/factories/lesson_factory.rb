@@ -16,5 +16,11 @@ FactoryBot.define do
     title { Faker::Beer.name }
     description { Faker::ChuckNorris.fact }
     creator { create(:user) }
+
+    trait :with_classrooms do
+      after :create do |lesson|
+        create_list(:classroom, Random.rand(3..7), lesson: lesson, creator: lesson.creator )
+      end
+    end
   end
 end

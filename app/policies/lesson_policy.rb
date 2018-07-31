@@ -1,16 +1,9 @@
-class LessonPolicy
-  attr_reader :user, :lesson
-
-  def initialize(user, lesson)
-    @user = user
-    @lesson = lesson
-  end
-
+class LessonPolicy < ApplicationPolicy
   def update?
-    user == lesson.creator
+    record.creator == user
   end
 
   def destroy?
-    user == lesson.creator
+    record.creator == user
   end
 end

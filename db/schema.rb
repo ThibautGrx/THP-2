@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_25_072009) do
+ActiveRecord::Schema.define(version: 2018_07_31_074705) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -22,6 +22,8 @@ ActiveRecord::Schema.define(version: 2018_07_25_072009) do
     t.uuid "lesson_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "creator_id"
+    t.index ["creator_id"], name: "index_classrooms_on_creator_id"
     t.index ["lesson_id"], name: "index_classrooms_on_lesson_id"
   end
 
@@ -114,6 +116,7 @@ ActiveRecord::Schema.define(version: 2018_07_25_072009) do
   end
 
   add_foreign_key "classrooms", "lessons"
+  add_foreign_key "classrooms", "users", column: "creator_id"
   add_foreign_key "invitations", "classrooms"
   add_foreign_key "invitations", "users"
   add_foreign_key "lessons", "users", column: "creator_id"

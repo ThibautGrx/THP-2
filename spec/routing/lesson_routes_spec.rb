@@ -38,12 +38,4 @@ describe "routing to lessons" do
       id: "79cfcc41-edcb-4f5f-91c9-3fb9b3733509"
     )
   end
-
-  it "does not routes /lessons/:id to lessons#edit" do
-    expect(get: "/lessons/79cfcc41-edcb-4f5f-91c9-3fb9b3733509/edit").not_to be_routable
-  end
-
-  it "does not routes /lessons/new to lessons#new" do
-    expect(get: "/lessons/new").not_to be_routable
-  end
 end

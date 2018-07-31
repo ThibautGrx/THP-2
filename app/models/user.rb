@@ -36,6 +36,8 @@ class User < ApplicationRecord
   validates :username, presence: true, uniqueness: { case_sensitive: false }
 
   has_many :lessons, foreign_key: 'creator_id', inverse_of: 'creator', dependent: :destroy
+  has_many :classrooms, foreign_key: 'creator_id', inverse_of: 'creator', dependent: :destroy
+
   has_many :invitations, dependent: :destroy
   has_many :votes, dependent: :destroy
   has_many :upvoted_questions, through: :votes, source: :question

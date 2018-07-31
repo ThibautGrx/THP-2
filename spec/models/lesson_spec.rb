@@ -26,6 +26,11 @@ RSpec.describe Lesson, type: :model do
     expect(lesson.creator.lessons.first).to eq(lesson)
   end
 
+  it "follow classroom link" do
+    lesson = create(:lesson, :with_classrooms).reload
+    expect(lesson.classrooms.first.lesson).to eq(lesson)
+  end
+
   it { is_expected.to validate_presence_of(:title) }
   it { is_expected.to validate_presence_of(:description) }
 
