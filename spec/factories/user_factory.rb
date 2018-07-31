@@ -43,13 +43,19 @@ FactoryBot.define do
 
     trait :with_lessons do
       after(:create) do |user|
-        create_list(:lesson, Random.rand(1..4), creator: user)
+        create_list(:lesson, 5, creator: user)
       end
     end
 
     trait :with_classrooms do
       after(:create) do |user|
-        create_list(:classroom, Random.rand(1..4), creator: user)
+        create_list(:classroom, 5, creator: user)
+      end
+    end
+
+    trait :with_invitations do
+      after(:create) do |user|
+        create_list(:invitation, 5, user: user)
       end
     end
   end

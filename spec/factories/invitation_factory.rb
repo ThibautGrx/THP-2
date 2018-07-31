@@ -3,7 +3,7 @@
 # Table name: invitations
 #
 #  id           :uuid             not null, primary key
-#  accepted     :boolean
+#  accepted     :boolean          default(FALSE)
 #  user_id      :uuid
 #  classroom_id :uuid
 #  created_at   :datetime         not null
@@ -12,8 +12,12 @@
 
 FactoryBot.define do
   factory :invitation do
-    is_accepted false
-    user nil
-    user nil
+    accepted false
+    user { create(:user) }
+    classroom { create(:classroom) }
+
+    trait :accepted do
+      accepted true
+    end
   end
 end
