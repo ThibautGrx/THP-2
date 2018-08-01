@@ -12,13 +12,16 @@ class InvitationsController < ApplicationController
   end
 
   def create
-    invitation = Invitations.create!(create_params.merge(classroom: current_classroom))
+    invitation = Invitation.new(create_params.merge(classroom: current_classroom))
+    authorize invitation
+    invitation.save!
     render json: invitation, status: :created
   end
 
   def update
     authorize current_invitation
-    current_invitation.update!(update_params)
+    current_invitation.accepted = !current_invitation.accepted
+    current_invitation.save!
     render json: current_invitation
   end
 
@@ -41,5 +44,4 @@ class InvitationsController < ApplicationController
   def create_params
     params.require(:invitation).permit(:user_id)
   end
-  alias_method :update_params, :create_params
 end
