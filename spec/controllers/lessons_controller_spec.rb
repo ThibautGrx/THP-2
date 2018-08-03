@@ -3,15 +3,13 @@ require 'rails_helper'
 RSpec.describe LessonsController, type: :controller do
   describe "#index" do
     subject { get :index }
-
-    context "when not logged in" do
-      it 'cannot get all the lessons' do
-        subject
-        expect(json_response[:errors][0]).to eq("You need to sign in or sign up before continuing.")
-        expect(response).to have_http_status(401)
-      end
-    end
-
+    #     context "when not logged in" do
+    #       it 'cannot get all the lessons' do
+    #         subject
+    #         expect(json_response[:errors][0]).to eq("You need to sign in or sign up before continuing.")
+    #         expect(response).to have_http_status(401)
+    #       end
+    #     end
     context "when logged in" do
       before do
         auth_me_please
@@ -36,15 +34,13 @@ RSpec.describe LessonsController, type: :controller do
 
     let(:lesson) { create(:lesson, :with_classrooms) }
     let(:id) { lesson.id }
-
-    context "when not logged in" do
-      it 'respond with unauthorized and error message' do
-        subject
-        expect(json_response[:errors][0]).to eq("You need to sign in or sign up before continuing.")
-        expect(response).to have_http_status(401)
-      end
-    end
-
+    #     context "when not logged in" do
+    #       it 'respond with unauthorized and error message' do
+    #         subject
+    #         expect(json_response[:errors][0]).to eq("You need to sign in or sign up before continuing.")
+    #         expect(response).to have_http_status(401)
+    #       end
+    #     end
     context "when logged in" do
       before do
         auth_me_please
@@ -79,13 +75,12 @@ RSpec.describe LessonsController, type: :controller do
 
     let(:title) { Faker::ChuckNorris.fact[0..49] }
     let(:description) { Faker::TwinPeaks.quote }
-    context "the user is not logged in" do
-      it "fails with a 401" do
-        subject
-        expect(response).to have_http_status(401)
-      end
-    end
-
+    #     context "the user is not logged in" do
+    #       it "fails with a 401" do
+    #         subject
+    #         expect(response).to have_http_status(401)
+    #       end
+    #     end
     context "the user is logged" do
       before do
         auth_me_please
@@ -174,14 +169,12 @@ RSpec.describe LessonsController, type: :controller do
     let(:title) { Faker::ChuckNorris.fact[0..49] }
     let(:description) { Faker::TwinPeaks.quote }
     let(:user) { test_user }
-
-    context "the user is logged" do
-      it "fails with a 401" do
-        subject
-        expect(response).to have_http_status(401)
-      end
-    end
-
+    #     context "the user is logged" do
+    #       it "fails with a 401" do
+    #         subject
+    #         expect(response).to have_http_status(401)
+    #       end
+    #     end
     context "the user is logged" do
       before do
         auth_me_please
@@ -230,15 +223,13 @@ RSpec.describe LessonsController, type: :controller do
     let!(:lesson) { create(:lesson, creator: user) }
     let(:id) { lesson.id }
     let(:user) { test_user }
-
-    context "user is not logged in" do
-      it 'cannot delete a lesson' do
-        subject
-        expect(json_response[:errors][0]).to eq("You need to sign in or sign up before continuing.")
-        expect(response).to have_http_status(401)
-      end
-    end
-
+    #     context "user is not logged in" do
+    #       it 'cannot delete a lesson' do
+    #         subject
+    #         expect(json_response[:errors][0]).to eq("You need to sign in or sign up before continuing.")
+    #         expect(response).to have_http_status(401)
+    #       end
+    #     end
     context "user is logged in" do
       before do
         auth_me_please
