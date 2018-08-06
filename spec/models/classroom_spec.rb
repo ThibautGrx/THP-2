@@ -3,8 +3,8 @@
 # Table name: classrooms
 #
 #  id          :uuid             not null, primary key
-#  title       :string
-#  description :text
+#  title       :string(50)       not null
+#  description :text             not null
 #  lesson_id   :uuid
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
