@@ -1,5 +1,3 @@
 # THP 2
 
-Semaine 1
-
-Test CI
+Semaine 6
