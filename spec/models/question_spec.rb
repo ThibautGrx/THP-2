@@ -3,7 +3,7 @@
 # Table name: questions
 #
 #  id           :uuid             not null, primary key
-#  body         :text
+#  body         :text             not null
 #  classroom_id :uuid
 #  user_id      :uuid
 #  created_at   :datetime         not null
