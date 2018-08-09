@@ -42,17 +42,13 @@ RSpec.describe User, type: :model do
   end
 
   it "follows lessons link" do
-    user = create(:user, :with_lessons)
-    p user.username
-    p User.last.username
-    expect(User.last.lessons.first.creator).to eq(user)
+    user = create(:user, :with_lessons).reload
+    expect(user.lessons.first.creator).to eq(user)
   end
 
   it "follows classroom link" do
-    user = create(:user, :with_classrooms)
-    p user.username
-    p User.last.username
-    expect(User.last.classrooms.first.creator).to eq(user)
+    user = create(:user, :with_classrooms).reload
+    expect(user.classrooms.first.creator).to eq(user)
   end
 
   it "cascade destroys its lessons" do
