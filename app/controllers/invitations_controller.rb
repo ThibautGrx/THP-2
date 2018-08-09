@@ -1,5 +1,6 @@
 class InvitationsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:show]
+  before_action :sign_in_from_mail, only: [:show]
 
   def show
     invitation = Invitation.find(params[:id])
@@ -15,6 +16,7 @@ class InvitationsController < ApplicationController
     invitation = Invitation.new(create_params.merge(classroom: current_classroom))
     authorize invitation
     invitation.save!
+    UserMailer.invitation_email(current_classroom, invitation).deliver_now
     render json: invitation, status: :created
   end
 
@@ -32,6 +34,15 @@ class InvitationsController < ApplicationController
   end
 
   private
+
+  def sign_in_from_mail
+    return if current_user
+    if params[:user_id]
+      request.headers.merge! User.find(params[:user_id]).create_new_auth_token
+    else
+      render json: { errors: "You need to sign in or sign up before continuing." }, status: :unauthorized
+    end
+  end
 
   def current_invitation
     @current_invitation ||= Invitation.find(params[:id])
