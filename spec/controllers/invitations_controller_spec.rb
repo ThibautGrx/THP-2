@@ -58,7 +58,8 @@ RSpec.describe InvitationsController, type: :controller do
           expect(json_response[:invitation][:id]).to eq(invitation.id)
           expect(json_response[:invitation][:accepted]).to eq(invitation.accepted)
           expect(json_response[:invitation][:classroom_id]).to eq(invitation.classroom.id)
-          expect(json_response[:invitation][:user_id]).to eq(invitation.user.id)
+          expect(json_response[:invitation][:student_id]).to eq(invitation.student.id)
+          expect(json_response[:invitation][:teacher_id]).to eq(invitation.teacher.id)
         end
         it 'respond with 200' do
           subject
@@ -69,9 +70,9 @@ RSpec.describe InvitationsController, type: :controller do
   end
 
   describe "#create" do
-    subject { post :create, params: { classroom_id: classroom.id, lesson_id: lesson.id, invitation: invitation_params } }
-    let(:invitation_params) { { user_id: user.id } }
-    let(:user) { create(:user) }
+    subject { post :create, params: { classroom_id: classroom.id, lesson_id: lesson.id, teacher: teacher, invitation: invitation_params } }
+    let(:invitation_params) { { student_id: student.id } }
+    let!(:student) { create(:user) }
     let(:teacher) { classroom.creator }
 
     context 'user is not logged in ' do
@@ -87,7 +88,8 @@ RSpec.describe InvitationsController, type: :controller do
         it 'return the invitation ' do
           subject
           expect(json_response[:invitation][:id]).not_to be_blank
-          expect(json_response[:invitation][:user_id]).to eq(user.id)
+          expect(json_response[:invitation][:student_id]).to eq(student.id)
+          expect(json_response[:invitation][:teacher_id]).to eq(teacher.id)
           expect(json_response[:invitation][:classroom_id]).to eq(classroom.id)
         end
         it 'return 201 ' do
@@ -115,9 +117,9 @@ RSpec.describe InvitationsController, type: :controller do
 
   describe "#update" do
     subject { patch :update, params: { classroom_id: classroom.id, lesson_id: lesson.id, id: id } }
-    let!(:invitation) { create(:invitation, user: user ) }
-    let(:user) { test_user }
+    let!(:invitation) { create(:invitation, student: student) }
     let(:id) { invitation.id }
+    let(:student) { test_user }
 
     context 'user is not logged in ' do
       it 'return 401 unauthorized' do
@@ -132,7 +134,8 @@ RSpec.describe InvitationsController, type: :controller do
         it 'return the invitation ' do
           subject
           expect(json_response[:invitation][:id]).not_to be_blank
-          expect(json_response[:invitation][:user_id]).to eq(invitation.user.id)
+          expect(json_response[:invitation][:student_id]).to eq(invitation.student.id)
+          expect(json_response[:invitation][:teacher_id]).to eq(invitation.teacher.id)
           expect(json_response[:invitation][:classroom_id]).to eq(invitation.classroom.id)
         end
         it 'return 200 ' do
@@ -146,7 +149,7 @@ RSpec.describe InvitationsController, type: :controller do
       end
 
       context 'if not logged in as an invitee' do
-        let(:user) { create(:user) }
+        let(:student) { create(:user) }
         it 'respond with 401 unauthorized' do
           auth_me_please
           subject
@@ -159,10 +162,10 @@ RSpec.describe InvitationsController, type: :controller do
   describe "#delete" do
     subject { delete :destroy, params: { id: id, lesson_id: lesson.id, classroom_id: classroom.id } }
 
-    let!(:invitation) { create(:invitation, user: invitee) }
-    let(:id) { invitation.id }
-    let(:invitee) { test_user }
-    let(:user) { invitation.classroom.creator }
+    let!(:invitation) { create(:invitation, student: student) }
+    let!(:id) { invitation.id }
+    let(:student) { test_user }
+    let(:user) { invitation.teacher }
 
     context "user is not logged in" do
       it 'cannot delete a classroom' do
@@ -191,8 +194,8 @@ RSpec.describe InvitationsController, type: :controller do
             expect(response).to have_http_status(204)
           end
         end
-        context 'logged as a invitee ' do
-          let(:user) { invitee }
+        context 'logged as a student ' do
+          let(:user) { student }
           it "can delete the classroom invitation" do
             subject
             expect(response).to have_http_status(204)

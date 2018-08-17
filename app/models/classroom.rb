@@ -21,14 +21,15 @@ class Classroom < ApplicationRecord
            -> { where "accepted = false" },
            class_name: "Invitation",
            inverse_of: false
-  has_many :students, through: :accepted_invitations, source: :user
-  has_many :invitees, through: :pending_invitations, source: :user
+  has_many :students, through: :accepted_invitations, source: :student
+  has_many :invitees, through: :pending_invitations, source: :student
+
   has_many :questions, dependent: :destroy
   has_many :ticked_steps, dependent: :destroy
   has_many :steps, through: :ticked_steps
 
   belongs_to :lesson
-  belongs_to :creator, class_name: 'User', inverse_of: 'classrooms'
+  belongs_to :creator, class_name: 'User', inverse_of: 'created_classrooms'
 
   validates :title, presence: true, length: { maximum: 50 }
   validates :description, presence: true, length: { maximum: 300 }
