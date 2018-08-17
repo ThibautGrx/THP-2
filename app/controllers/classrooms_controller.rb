@@ -12,7 +12,8 @@ class ClassroomsController < ApplicationController
   end
 
   def create
-    classroom = current_user.classrooms.create!(create_params.merge(lesson: current_lesson))
+    authorize(current_lesson, :create_classroom?)
+    classroom = Classroom.create!(create_params.merge(creator: current_user, lesson: current_lesson))
     render json: classroom, status: :created
   end
 

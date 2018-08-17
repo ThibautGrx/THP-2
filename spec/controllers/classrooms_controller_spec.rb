@@ -93,6 +93,16 @@ RSpec.describe ClassroomsController, type: :controller do
         auth_me_please
       end
 
+      context "the lesson is not his" do
+        let(:lesson) { create(:lesson) }
+        let(:lesson_id) { lesson.id }
+
+        it 'can\'t create a classroom' do
+          subject
+          expect(response).to have_http_status(401)
+        end
+      end
+
       it "returns a 201" do
         subject
         expect(response).to have_http_status(201)

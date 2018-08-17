@@ -17,5 +17,12 @@ FactoryBot.define do
     description { Faker::ChuckNorris.fact }
     creator { create(:user) }
     lesson { create(:lesson) }
+
+    trait :with_invitations do
+      after(:create) do |classroom|
+        create_list(:invitation, 5, accepted: true, classroom: classroom)
+        create_list(:invitation, 5, accepted: false, classroom: classroom)
+      end
+    end
   end
 end

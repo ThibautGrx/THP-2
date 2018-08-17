@@ -4,16 +4,13 @@
 #
 #  id           :uuid             not null, primary key
 #  accepted     :boolean          default(FALSE)
-#  user_id      :uuid
 #  classroom_id :uuid
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  student_id   :uuid
+#  teacher_id   :uuid
 #
 
-FactoryBot.define do
-  factory :invitation do
-    is_accepted false
-    user nil
-    user nil
-  end
+class InvitationSerializer < ActiveModel::Serializer
+  attributes :id, :student_id, :teacher_id, :classroom_id, :created_at, :accepted
 end
