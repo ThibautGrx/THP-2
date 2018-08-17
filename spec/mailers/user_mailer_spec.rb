@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe UserMailer, type: :mailer do
   describe 'invitation_email' do
     let(:invitation){ create(:invitation) }
-    let(:user){ invitation.user }
+    let(:student){ invitation.student }
     let(:classroom){ create(:classroom) }
     let(:mail) { UserMailer.invitation_email(classroom, invitation) }
 
@@ -12,7 +12,7 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it 'renders the receiver email' do
-      expect(mail.to).to eq([user.email])
+      expect(mail.to).to eq([student.email])
     end
 
     it 'renders the sender email' do
@@ -20,7 +20,7 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it 'countain username' do
-      expect(mail.body.encoded).to match(user.username)
+      expect(mail.body.encoded).to match(student.username)
     end
 
     it 'countain classroom name' do

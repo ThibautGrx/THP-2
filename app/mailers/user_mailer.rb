@@ -2,9 +2,10 @@ class UserMailer < ApplicationMailer
   default from: 'contact@thp2.com'
 
   def invitation_email(classroom, invitation)
-    @user = invitation.user
+    @student = invitation.student
+    @teacher = invitation.teacher
     @classroom = classroom
     @invitation = invitation
-    mail(to: @user.email, subject: 'You\'ve received an invitation !')
+    mail(to: @student.email, subject: 'You\'ve received an invitation !')
   end
 end
