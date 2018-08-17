@@ -4,10 +4,10 @@ class InvitationPolicy < ApplicationPolicy
   end
 
   def update?
-    record.user == user
+    record.student == user
   end
 
   def destroy?
-    record.user == user || record.classroom.creator == user
+    record.teacher == user || record.student == user
   end
 end

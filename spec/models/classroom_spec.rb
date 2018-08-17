@@ -23,7 +23,7 @@ RSpec.describe Classroom, type: :model do
 
   it "follows creator link" do
     classroom = create(:classroom).reload
-    expect(classroom.creator.classrooms.first).to eq(classroom)
+    expect(classroom.creator.created_classrooms.first).to eq(classroom)
   end
 
   it "follows lesson link" do
@@ -38,12 +38,12 @@ RSpec.describe Classroom, type: :model do
 
   it "follows students link" do
     classroom = create(:classroom, :with_invitations).reload
-    expect(classroom.students.first.invitations.first.classroom).to eq(classroom)
+    expect(classroom.students.first.received_invitations.first.classroom).to eq(classroom)
   end
 
   it "follows invitees link" do
     classroom = create(:classroom, :with_invitations).reload
-    expect(classroom.invitees.first.invitations.first.classroom).to eq(classroom)
+    expect(classroom.invitees.first.received_invitations.first.classroom).to eq(classroom)
   end
 
   it "cascade destroys its invitations" do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_31_074705) do
+ActiveRecord::Schema.define(version: 2018_08_17_063041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -29,12 +29,14 @@ ActiveRecord::Schema.define(version: 2018_07_31_074705) do
 
   create_table "invitations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "accepted", default: false
-    t.uuid "user_id"
     t.uuid "classroom_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "student_id"
+    t.uuid "teacher_id"
     t.index ["classroom_id"], name: "index_invitations_on_classroom_id"
-    t.index ["user_id"], name: "index_invitations_on_user_id"
+    t.index ["student_id"], name: "index_invitations_on_student_id"
+    t.index ["teacher_id"], name: "index_invitations_on_teacher_id"
   end
 
   create_table "lessons", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -118,7 +120,8 @@ ActiveRecord::Schema.define(version: 2018_07_31_074705) do
   add_foreign_key "classrooms", "lessons"
   add_foreign_key "classrooms", "users", column: "creator_id"
   add_foreign_key "invitations", "classrooms"
-  add_foreign_key "invitations", "users"
+  add_foreign_key "invitations", "users", column: "student_id"
+  add_foreign_key "invitations", "users", column: "teacher_id"
   add_foreign_key "lessons", "users", column: "creator_id"
   add_foreign_key "questions", "users"
   add_foreign_key "steps", "lessons"

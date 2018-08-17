@@ -4,16 +4,18 @@
 #
 #  id           :uuid             not null, primary key
 #  accepted     :boolean          default(FALSE)
-#  user_id      :uuid
 #  classroom_id :uuid
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  student_id   :uuid
+#  teacher_id   :uuid
 #
 
 FactoryBot.define do
   factory :invitation do
     accepted false
-    user { create(:user) }
+    student { create(:user) }
+    teacher { create(:user) }
     classroom { create(:classroom) }
 
     trait :accepted do

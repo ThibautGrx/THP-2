@@ -53,9 +53,15 @@ FactoryBot.define do
       end
     end
 
-    trait :with_invitations do
+    trait :with_sent_invitations do
       after(:create) do |user|
-        create_list(:invitation, 5, user: user)
+        create_list(:invitation, 5, teacher: user)
+      end
+    end
+
+    trait :with_received_invitations do
+      after(:create) do |user|
+        create_list(:invitation, 5, student: user)
       end
     end
   end

@@ -12,7 +12,7 @@ class InvitationsController < ApplicationController
   end
 
   def create
-    invitation = Invitation.new(create_params.merge(classroom: current_classroom))
+    invitation = Invitation.new(create_params.merge(classroom: current_classroom, teacher: current_user))
     authorize invitation
     invitation.save!
     render json: invitation, status: :created
@@ -42,6 +42,6 @@ class InvitationsController < ApplicationController
   end
 
   def create_params
-    params.require(:invitation).permit(:user_id)
+    params.require(:invitation).permit(:student_id)
   end
 end
