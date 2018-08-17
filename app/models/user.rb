@@ -36,9 +36,12 @@ class User < ApplicationRecord
   validates :username, presence: true, uniqueness: { case_sensitive: false }
 
   has_many :lessons, foreign_key: 'creator_id', inverse_of: 'creator', dependent: :destroy
-  has_many :classrooms, foreign_key: 'creator_id', inverse_of: 'creator', dependent: :destroy
+  has_many :created_classrooms, class_name: 'Classroom', foreign_key: 'creator_id', inverse_of: 'creator', dependent: :destroy
 
-  has_many :invitations, dependent: :destroy
+  has_many(:sent_invitations, class_name: 'Invitation', inverse_of: 'teacher', dependent: :destroy, foreign_key: 'teacher_id')
+  has_many(:received_invitations, class_name: 'Invitation', inverse_of: 'student', dependent: :destroy, foreign_key: 'student_id',)
+  has_many(:joined_classrooms, -> { where(invitations: { accepted: true }) }, through: :received_invitations, inverse_of: :students, source: :lesson)
+
   has_many :votes, dependent: :destroy
   has_many :upvoted_questions, through: :votes, source: :question
   has_many :ticked_steps, dependent: :destroy
