@@ -37,11 +37,7 @@ class InvitationsController < ApplicationController
 
   def sign_in_from_mail
     return if current_user
-    if params[:user_id]
-      request.headers.merge! User.find(params[:user_id]).create_new_auth_token
-    else
-      render json: { errors: "You need to sign in or sign up before continuing." }, status: :unauthorized
-    end
+    render json: { errors: "You need to sign in or sign up before continuing." }, status: :unauthorized unless params[:user_id]
   end
 
   def current_invitation
