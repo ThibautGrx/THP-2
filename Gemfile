@@ -12,14 +12,16 @@ gem 'puma', '~> 3.11'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '~> 1.3.0', require: false
-gem "lograge"
-gem "logstash-event"
 gem "pundit"
-gem "skylight"
+
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 group :production do
+  gem "lograge"
+  gem "logstash-event"
+  gem 'logstash-logger'
   gem 'sentry-raven', '~> 1.2', '>= 1.2.2'
+  gem "skylight"
 end
 
 group :development, :test do
