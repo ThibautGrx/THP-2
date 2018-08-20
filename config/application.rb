@@ -10,7 +10,6 @@ require "action_controller/railtie"
 require "action_mailer/railtie"
 require "action_view/railtie"
 require "action_cable/engine"
-require "skylight/railtie"
 # require "sprockets/railtie"
 # require "rails/test_unit/railtie"
 
@@ -35,7 +34,5 @@ module Thp2
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
     end
-    config.skylight.logger = config.logger
-    config.skylight.probes += %w(active_model_serializers)
   end
 end
