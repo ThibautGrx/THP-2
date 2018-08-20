@@ -4,8 +4,9 @@ RSpec.describe UserMailer, type: :mailer do
   describe 'invitation_email' do
     let(:invitation){ create(:invitation) }
     let(:student){ invitation.student }
-    let(:classroom){ create(:classroom) }
-    let(:mail) { UserMailer.invitation_email(classroom, invitation) }
+    let(:classroom){ invitation.classroom }
+    let(:lesson){ classroom.lesson }
+    let(:mail) { UserMailer.invitation_email(invitation) }
 
     it 'renders the subject' do
       expect(mail.subject).to eq('You\'ve received an invitation !')
@@ -28,6 +29,7 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it 'countain url to accepte invitation' do
+      expect(mail.body.encoded).to match("/lessons/#{lesson.id}/classrooms/#{classroom.id}/invitations/#{invitation.id}")
     end
   end
 end

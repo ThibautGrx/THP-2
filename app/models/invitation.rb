@@ -19,4 +19,10 @@ class Invitation < ApplicationRecord
   validates :student, presence: true
   validates :teacher, presence: true
   validates :classroom, presence: true
+
+  after_commit :send_mail_to_invitee, on: :create
+
+  def send_mail_to_invitee
+    UserMailer.invitation_email(Invitation.last).deliver_now
+  end
 end
