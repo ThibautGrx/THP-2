@@ -41,12 +41,14 @@ group :development do
   gem 'guard-rspec', require: false
   gem 'guard-rubocop', require: false
   gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'sidekiq'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
 group :test do
   gem 'faker'
+  gem 'rspec-sidekiq'
   gem 'shoulda-matchers', '~> 3.0'
 end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

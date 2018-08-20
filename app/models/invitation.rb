@@ -23,6 +23,6 @@ class Invitation < ApplicationRecord
   after_commit :send_mail_to_invitee, on: :create
 
   def send_mail_to_invitee
-    UserMailer.invitation_email(Invitation.last).deliver_now
+    UserMailer.invitation_email(Invitation.last).deliver_later
   end
 end

@@ -23,8 +23,8 @@ RSpec.describe Invitation, type: :model do
     expect(first_invitation.classroom).to eq(invitation.classroom)
   end
 
-  it "it send an email after commit" do
-    expect{ create(:invitation) }.to change{ ActionMailer::Base.deliveries.count }.by(1)
+  it "create add sending an email to queue" do
+    expect{ create(:invitation) }.to change{ Sidekiq::Worker.jobs.count }.by(1)
   end
 
   it 'follow the student link' do

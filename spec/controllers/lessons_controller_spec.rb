@@ -139,7 +139,7 @@ RSpec.describe LessonsController, type: :controller do
       end
 
       context "if title is too long" do
-        let(:title) { Faker::Lorem.sentence(10).first(51) }
+        let(:title) { Faker::Lorem.sentence(10).first(100) }
         it "returns a 403" do
           subject
           expect(response).to have_http_status(403)
