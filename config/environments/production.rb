@@ -94,12 +94,8 @@ Rails.application.configure do
       params: event.payload[:params],
     }
   end
-  
-  config.logger = LogStashLogger.new(type: :stdout)
 
-  Rack::Timeout::StateChangeLoggingObserver::STATE_LOG_LEVEL[:ready] = :debug
-  Rack::Timeout::StateChangeLoggingObserver::STATE_LOG_LEVEL[:completed] = :debug
-  Rack::Timeout::Logger.logger = config.logger
+  config.logger = LogStashLogger.new(type: :stdout)
   
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
