@@ -85,12 +85,16 @@ Rails.application.configure do
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
-    logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+  config.lograge.enabled = true
+  config.lograge.base_controller_class = 'ActionController::API'
+  config.lograge.formatter = Lograge::Formatters::Logstash.new
+  config.lograge.custom_options = lambda do |event|
+    {
+      tags: [event.payload[:headers]["action_dispatch.request_id"]],
+      params: event.payload[:params],
+    }
   end
-
+  
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
