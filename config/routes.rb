@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'auth'
+
   resources :lessons, except: %i[new edit] do
-    resources :classrooms, except: %i[new edit] do
-      resources :invitations, except: %i[new edit]
-    end
+    resources :classrooms, only: %i[create]
   end
+
+  resources :classrooms, except: %i[create new edit] do
+    resources :invitations, only: %i[create]
+  end
+
+  resources :invitations, except: %i[create new edit]
 end
 
 # == Route Map
