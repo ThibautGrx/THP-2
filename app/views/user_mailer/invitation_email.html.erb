@@ -3,6 +3,6 @@
   You've just received an invitation to join the following classroom: <%= @classroom.title %>
 </p>
 <p>
-  To accept the invitation just follow this link:  <%=link_to "Afficher l'invitation", controller: 'invitations', action: 'show',id: @invitation.id, classroom_id: @invitation.classroom.id, lesson_id: @invitation.classroom.lesson.id %> .
+  To accept the invitation just follow this link:  <%=link_to "Afficher l'invitation", controller: 'invitations', action: 'show',id: @invitation.id %> .
 </p>
 <p>Thanks for joining and have a great day!</p>

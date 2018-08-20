@@ -29,7 +29,7 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it 'countain url to accepte invitation' do
-      expect(mail.body.encoded).to match("/lessons/#{lesson.id}/classrooms/#{classroom.id}/invitations/#{invitation.id}")
+      expect(mail.body.encoded).to match("/invitations/#{invitation.id}")
     end
   end
 end
