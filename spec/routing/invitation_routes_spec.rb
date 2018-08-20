@@ -4,9 +4,10 @@ describe "routing to invitations" do
   let(:lesson) { create(:lesson, :with_classrooms) }
   let(:classroom_id) { lesson.classrooms.first.id }
   it "routes /lessons/:id/classroom/:id/invitations to invitations#index" do
-    expect(get: "/invitations").to route_to(
+    expect(get: "/classrooms/#{classroom_id}/invitations").to route_to(
       controller: "invitations",
       action: "index",
+      classroom_id: classroom_id
     )
   end
 

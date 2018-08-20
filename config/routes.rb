@@ -2,14 +2,12 @@ Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'auth'
 
   resources :lessons, except: %i[new edit] do
-    resources :classrooms, only: %i[create]
+    resources :classrooms, shallow: true
   end
 
-  resources :classrooms, except: %i[create new edit] do
-    resources :invitations, only: %i[create]
+  resources :classrooms, except: %i[new edit] do
+    resources :invitations, shallow: true
   end
-
-  resources :invitations, except: %i[create new edit]
 end
 
 # == Route Map
@@ -35,24 +33,30 @@ end
 #                           POST   /auth/confirmation(.:format)                                                             devise_token_auth/confirmations#create
 #       auth_validate_token POST   /auth/validate_token(.:format)                                                           devise_token_auth/token_validations#validate_token
 #        auth_password_edit POST   /auth/password/edit(.:format)                                                            devise_token_auth/passwords#edit
-#         lesson_classrooms POST   /lessons/:lesson_id/classrooms(.:format)                                                 classrooms#create
+#         lesson_classrooms GET    /lessons/:lesson_id/classrooms(.:format)                                                 classrooms#index
+#                           POST   /lessons/:lesson_id/classrooms(.:format)                                                 classrooms#create
+#                 classroom GET    /classrooms/:id(.:format)                                                                classrooms#show
+#                           PATCH  /classrooms/:id(.:format)                                                                classrooms#update
+#                           PUT    /classrooms/:id(.:format)                                                                classrooms#update
+#                           DELETE /classrooms/:id(.:format)                                                                classrooms#destroy
 #                   lessons GET    /lessons(.:format)                                                                       lessons#index
 #                           POST   /lessons(.:format)                                                                       lessons#create
 #                    lesson GET    /lessons/:id(.:format)                                                                   lessons#show
 #                           PATCH  /lessons/:id(.:format)                                                                   lessons#update
 #                           PUT    /lessons/:id(.:format)                                                                   lessons#update
 #                           DELETE /lessons/:id(.:format)                                                                   lessons#destroy
-#     classroom_invitations POST   /classrooms/:classroom_id/invitations(.:format)                                          invitations#create
-#                classrooms GET    /classrooms(.:format)                                                                    classrooms#index
-#                 classroom GET    /classrooms/:id(.:format)                                                                classrooms#show
-#                           PATCH  /classrooms/:id(.:format)                                                                classrooms#update
-#                           PUT    /classrooms/:id(.:format)                                                                classrooms#update
-#                           DELETE /classrooms/:id(.:format)                                                                classrooms#destroy
-#               invitations GET    /invitations(.:format)                                                                   invitations#index
+#     classroom_invitations GET    /classrooms/:classroom_id/invitations(.:format)                                          invitations#index
+#                           POST   /classrooms/:classroom_id/invitations(.:format)                                          invitations#create
 #                invitation GET    /invitations/:id(.:format)                                                               invitations#show
 #                           PATCH  /invitations/:id(.:format)                                                               invitations#update
 #                           PUT    /invitations/:id(.:format)                                                               invitations#update
 #                           DELETE /invitations/:id(.:format)                                                               invitations#destroy
+#                classrooms GET    /classrooms(.:format)                                                                    classrooms#index
+#                           POST   /classrooms(.:format)                                                                    classrooms#create
+#                           GET    /classrooms/:id(.:format)                                                                classrooms#show
+#                           PATCH  /classrooms/:id(.:format)                                                                classrooms#update
+#                           PUT    /classrooms/:id(.:format)                                                                classrooms#update
+#                           DELETE /classrooms/:id(.:format)                                                                classrooms#destroy
 #        rails_service_blob GET    /rails/active_storage/blobs/:signed_id/*filename(.:format)                               active_storage/blobs#show
 # rails_blob_representation GET    /rails/active_storage/representations/:signed_blob_id/:variation_key/*filename(.:format) active_storage/representations#show
 #        rails_disk_service GET    /rails/active_storage/disk/:encoded_key/*filename(.:format)                              active_storage/disk#show
