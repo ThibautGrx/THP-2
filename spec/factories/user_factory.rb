@@ -30,8 +30,8 @@ require 'faker'
 
 FactoryBot.define do
   factory :user do
-    email { Faker::Internet.email }
-    username{ Faker::Internet.user_name }
+    email { Faker::Internet.unique.email }
+    username{ Faker::Internet.unique.user_name }
     password { Faker::Internet.password(8) }
     password_confirmation { password }
     provider "email"
