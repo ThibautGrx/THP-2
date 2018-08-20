@@ -10,15 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_31_074705) do
+ActiveRecord::Schema.define(version: 2018_08_17_063041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "classrooms", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "title"
-    t.text "description"
+    t.string "title", limit: 50, null: false
+    t.text "description", null: false
     t.uuid "lesson_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -28,13 +28,15 @@ ActiveRecord::Schema.define(version: 2018_07_31_074705) do
   end
 
   create_table "invitations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.boolean "accepted"
-    t.uuid "user_id"
+    t.boolean "accepted", default: false
     t.uuid "classroom_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "student_id"
+    t.uuid "teacher_id"
     t.index ["classroom_id"], name: "index_invitations_on_classroom_id"
-    t.index ["user_id"], name: "index_invitations_on_user_id"
+    t.index ["student_id"], name: "index_invitations_on_student_id"
+    t.index ["teacher_id"], name: "index_invitations_on_teacher_id"
   end
 
   create_table "lessons", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -42,13 +44,13 @@ ActiveRecord::Schema.define(version: 2018_07_31_074705) do
     t.text "description", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "creator_id"
     t.integer "user_id"
+    t.uuid "creator_id"
     t.index ["creator_id"], name: "index_lessons_on_creator_id"
   end
 
   create_table "questions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.text "body"
+    t.text "body", null: false
     t.uuid "classroom_id"
     t.uuid "user_id"
     t.datetime "created_at", null: false
@@ -58,8 +60,8 @@ ActiveRecord::Schema.define(version: 2018_07_31_074705) do
   end
 
   create_table "steps", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "title"
-    t.text "description"
+    t.string "title", limit: 50, null: false
+    t.text "description", null: false
     t.uuid "lesson_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -118,7 +120,8 @@ ActiveRecord::Schema.define(version: 2018_07_31_074705) do
   add_foreign_key "classrooms", "lessons"
   add_foreign_key "classrooms", "users", column: "creator_id"
   add_foreign_key "invitations", "classrooms"
-  add_foreign_key "invitations", "users"
+  add_foreign_key "invitations", "users", column: "student_id"
+  add_foreign_key "invitations", "users", column: "teacher_id"
   add_foreign_key "lessons", "users", column: "creator_id"
   add_foreign_key "questions", "users"
   add_foreign_key "steps", "lessons"

@@ -13,6 +13,7 @@
 
 class Lesson < ApplicationRecord
   belongs_to :creator, class_name: 'User', inverse_of: 'lessons'
+
   has_many :steps, dependent: :destroy
   has_many :classrooms, dependent: :destroy
 

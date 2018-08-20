@@ -7,6 +7,15 @@ describe LessonPolicy do
   let(:created_lesson) { create(:lesson, creator: test_user) }
   let(:not_created_lesson) { create(:lesson) }
 
+  permissions :create_classroom? do
+    it "allow lesson creator to create classroom" do
+      expect(subject).to permit(test_user, created_lesson)
+    end
+    it "denies classroom creation if not lesson creator" do
+      expect(subject).not_to permit(user, created_lesson)
+    end
+  end
+
   permissions :update? do
     it "allow creator to update his lesson" do
       expect(subject).to permit(test_user, created_lesson)
