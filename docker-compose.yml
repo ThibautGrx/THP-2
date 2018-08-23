@@ -1,5 +1,7 @@
 version: '3'
 services:
+  redis:
+    image: redis:latest 
   postgres:
     image: postgres:10.4
     environment:
@@ -9,6 +11,7 @@ services:
     build: .
     depends_on:
       - postgres
+      - redis
     volumes:
       - .:/myapp
     ports:
@@ -17,3 +20,12 @@ services:
       - DB_USERNAME=app
       - DB_PASSWORD=app
       - DB_HOST=postgres
+      - REDIS_URL=redis://redis:6379/0
+  sidekiq:
+    build: .
+    command: bundle exec sidekiq
+    volumes:
+      - .:/myapp
+    depends_on:
+      - redis
+      - postgres
