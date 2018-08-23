@@ -23,6 +23,10 @@ RSpec.describe Invitation, type: :model do
     expect(first_invitation.classroom).to eq(invitation.classroom)
   end
 
+  it "create add sending an email to queue" do
+    expect{ create(:invitation) }.to change{ Sidekiq::Worker.jobs.count }.by(1)
+  end
+
   it 'follow the student link' do
     invitation = create(:invitation).reload
     expect(invitation.student.received_invitations.first).to eq(invitation)

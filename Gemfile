@@ -13,6 +13,7 @@ gem 'puma', '~> 3.11'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '~> 1.3.0', require: false
 gem "pundit"
+gem 'sidekiq'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 group :production do
@@ -47,6 +48,7 @@ end
 
 group :test do
   gem 'faker'
+  gem 'rspec-sidekiq'
   gem 'shoulda-matchers', '~> 3.0'
 end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

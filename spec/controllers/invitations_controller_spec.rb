@@ -100,6 +100,9 @@ RSpec.describe InvitationsController, type: :controller do
           subject
           expect(json_response[:invitation][:accepted]).to be_falsey
         end
+        it 'add send invitation email to Sidekiq queue' do
+          expect{ subject }.to change{ Sidekiq::Worker.jobs.count }.by(1)
+        end
       end
 
       context 'if not logged in as teacher' do
