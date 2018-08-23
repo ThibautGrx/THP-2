@@ -13,6 +13,7 @@ gem 'puma', '~> 3.11'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '~> 1.3.0', require: false
 gem "pundit"
+gem 'sidekiq'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 group :production do
@@ -41,7 +42,6 @@ group :development do
   gem 'guard-rspec', require: false
   gem 'guard-rubocop', require: false
   gem 'listen', '>= 3.0.5', '< 3.2'
-  gem 'sidekiq'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
