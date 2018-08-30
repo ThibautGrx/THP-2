@@ -101,7 +101,7 @@ RSpec.describe InvitationsController, type: :controller do
           expect(json_response[:invitation][:accepted]).to be_falsey
         end
         it 'send an email' do
-          expect{ subject }.to change{ ActionMailer::Base.deliveries.count }.by(1)
+          expect{ subject }.to have_enqueued_job(ActionMailer::DeliveryJob)
         end
       end
 

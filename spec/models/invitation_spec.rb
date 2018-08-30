@@ -24,7 +24,7 @@ RSpec.describe Invitation, type: :model do
   end
 
   it "it send an email after commit" do
-    expect{ create(:invitation) }.to change{ ActionMailer::Base.deliveries.count }.by(1)
+    expect{ create(:invitation) }.to have_enqueued_job(ActionMailer::DeliveryJob)
   end
 
   it 'follow the student link' do
