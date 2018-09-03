@@ -14,6 +14,7 @@ gem 'puma', '~> 3.11'
 gem 'bootsnap', '~> 1.3.0', require: false
 gem "pundit"
 gem 'rack-attack'
+gem "rack-timeout"
 gem 'sidekiq'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
