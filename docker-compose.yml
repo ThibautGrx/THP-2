@@ -29,3 +29,8 @@ services:
     depends_on:
       - redis
       - postgres
+    environment:
+      - DB_USERNAME=app
+      - DB_PASSWORD=app
+      - DB_HOST=postgres
+      - REDIS_URL=redis://redis:6379/0
