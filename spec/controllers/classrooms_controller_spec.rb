@@ -4,7 +4,9 @@ RSpec.describe ClassroomsController, type: :controller do
   let!(:lesson) { create(:lesson, creator: test_user) }
   let(:lesson_id) { lesson.id }
   describe "#index" do
-    subject { get :index, params: { lesson_id: lesson_id } }
+    let(:page_params) { { number: 1, size: 5 } }
+
+    subject { get :index, params: { lesson_id: lesson_id }.merge(page_params) }
 
     context "when not logged in" do
       it 'cannot get all the classrooms' do
@@ -19,16 +21,26 @@ RSpec.describe ClassroomsController, type: :controller do
         auth_me_please
       end
 
-      let(:classrooms) { create_list(:classroom, 5) }
+      let!(:classrooms) { create_list(:classroom, 10) }
 
       it 'can get all the classrooms' do
         subject
-        expect(json_response[:classrooms].length).to eq(Classroom.count)
+        expect(json_response[:classrooms].length).to eq(5)
       end
 
       it "returns a 200" do
         subject
         expect(response).to have_http_status(200)
+      end
+
+      it "returns meta with informations about pagination" do
+        subject
+        p json_response
+        expect(json_response[:meta][:current_page]).to eq(1)
+        expect(json_response[:meta][:next_page]).to eq(2)
+        expect(json_response[:meta][:prev_page]).to be_nil
+        expect(json_response[:meta][:total_pages]).to eq(2)
+        expect(json_response[:meta][:total_count]).to eq(10)
       end
     end
   end

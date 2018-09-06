@@ -7,8 +7,8 @@ class LessonsController < ApplicationController
   end
 
   def index
-    lessons = Lesson.all
-    render json: lessons
+    lessons = Lesson.all.order(created_at: :desc).page(page_params[:number]).per(page_params[:size])
+    render json: lessons, meta: pagination_dict(lessons)
   end
 
   def create
