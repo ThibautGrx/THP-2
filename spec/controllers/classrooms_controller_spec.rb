@@ -35,7 +35,6 @@ RSpec.describe ClassroomsController, type: :controller do
 
       it "returns meta with informations about pagination" do
         subject
-        p json_response
         expect(json_response[:meta][:current_page]).to eq(1)
         expect(json_response[:meta][:next_page]).to eq(2)
         expect(json_response[:meta][:prev_page]).to be_nil
