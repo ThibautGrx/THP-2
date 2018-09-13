@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   resources :classrooms, except: %i[new edit] do
     resources :invitations, shallow: true
+    resources :ticked_steps, shallow: true
   end
   mount ActionCable.server => '/cable/:token'
 end
@@ -61,13 +62,19 @@ end
 #                           PATCH  /invitations/:id(.:format)                                                               invitations#update
 #                           PUT    /invitations/:id(.:format)                                                               invitations#update
 #                           DELETE /invitations/:id(.:format)                                                               invitations#destroy
+#    classroom_ticked_steps GET    /classrooms/:classroom_id/ticked_steps(.:format)                                         ticked_steps#index
+#                           POST   /classrooms/:classroom_id/ticked_steps(.:format)                                         ticked_steps#create
+#               ticked_step GET    /ticked_steps/:id(.:format)                                                              ticked_steps#show
+#                           PATCH  /ticked_steps/:id(.:format)                                                              ticked_steps#update
+#                           PUT    /ticked_steps/:id(.:format)                                                              ticked_steps#update
+#                           DELETE /ticked_steps/:id(.:format)                                                              ticked_steps#destroy
 #                classrooms GET    /classrooms(.:format)                                                                    classrooms#index
 #                           POST   /classrooms(.:format)                                                                    classrooms#create
 #                           GET    /classrooms/:id(.:format)                                                                classrooms#show
 #                           PATCH  /classrooms/:id(.:format)                                                                classrooms#update
 #                           PUT    /classrooms/:id(.:format)                                                                classrooms#update
 #                           DELETE /classrooms/:id(.:format)                                                                classrooms#destroy
-#                                  /cable/:token                                                                            #<ActionCable::Server::Base:0x00007fa1054dc030 @mutex=#<Monitor:0x00007fa1054dd548 @mon_owner=nil, @mon_count=0, @mon_mutex=#<Thread::Mutex:0x00007fa1069d7f98>>, @pubsub=nil, @worker_pool=nil, @event_loop=nil, @remote_connections=nil>
+#                                  /cable/:token                                                                            #<ActionCable::Server::Base:0x00007f8299495f98 @mutex=#<Monitor:0x00007f8299495ea8 @mon_owner=nil, @mon_count=0, @mon_mutex=#<Thread::Mutex:0x00007f8299495d40>>, @pubsub=nil, @worker_pool=nil, @event_loop=nil, @remote_connections=nil>
 #        rails_service_blob GET    /rails/active_storage/blobs/:signed_id/*filename(.:format)                               active_storage/blobs#show
 # rails_blob_representation GET    /rails/active_storage/representations/:signed_blob_id/:variation_key/*filename(.:format) active_storage/representations#show
 #        rails_disk_service GET    /rails/active_storage/disk/:encoded_key/*filename(.:format)                              active_storage/disk#show
