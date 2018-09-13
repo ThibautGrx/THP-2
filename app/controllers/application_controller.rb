@@ -27,6 +27,29 @@ class ApplicationController < ActionController::API
     render json: { errors: "You are not authorized to perform this action." }, status: :unauthorized
   end
 
+  def pagination_dict(collection)
+    {
+      current_page: collection.current_page,
+      next_page: collection.next_page,
+      prev_page: collection.prev_page,
+      total_pages: collection.total_pages,
+      total_count: collection.total_count
+    }
+  end
+
+  private
+
+  def page_params
+    @page_params ||=
+      begin
+        new_page_params = params.permit(:number, :size)
+        new_page_params[:size] ||= 25
+        new_page_params[:size] = new_page_params[:size].to_i
+        new_page_params[:size] = 25 if new_page_params[:size] > 100
+        new_page_params
+      end
+  end
+
   protected
 
   def configure_permitted_parameters

@@ -12,6 +12,7 @@ gem 'puma', '~> 3.11'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '~> 1.3.0', require: false
+gem 'kaminari'
 gem "pundit"
 gem 'rack-attack'
 gem "rack-timeout"

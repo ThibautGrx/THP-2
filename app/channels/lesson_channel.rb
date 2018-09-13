@@ -1,6 +1,5 @@
 class LessonChannel < ApplicationCable::Channel
   def subscribed
-    binding.pry
     reject unless params[:id]
     lesson = Lesson.find(params[:id])
     reject unless lesson

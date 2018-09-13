@@ -1,13 +1,14 @@
 require 'rails_helper'
 
-RSpec.describe LessonsController, type: :controller do
+RSpec.describe StepsController, type: :controller do
+  let!(:lesson) { create(:lesson, creator: user) }
+  let(:user) { test_user }
+  let(:lesson_id) { lesson.id }
   describe "#index" do
-    let(:page_params) { { number: 1, size: 5 } }
-
-    subject { get :index, params: page_params }
+    subject { get :index, params: { lesson_id: lesson_id } }
 
     context "when not logged in" do
-      it 'cannot get all the lessons' do
+      it 'cannot get all the steps' do
         subject
         expect(json_response[:errors][0]).to eq("You need to sign in or sign up before continuing.")
         expect(response).to have_http_status(401)
@@ -19,34 +20,25 @@ RSpec.describe LessonsController, type: :controller do
         auth_me_please
       end
 
-      let!(:lessons) { create_list(:lesson, 10) }
+      let!(:steps) { create_list(:step, 10) }
 
-      it 'can get all the lessons' do
+      it 'can get all the steps' do
         subject
-        expect(json_response[:lessons].length).to eq(5)
+        expect(json_response[:steps].length).to eq(10)
       end
 
       it "returns a 200" do
         subject
         expect(response).to have_http_status(200)
       end
-
-      it "returns meta with informations about pagination" do
-        subject
-        expect(json_response[:meta][:current_page]).to eq(1)
-        expect(json_response[:meta][:next_page]).to eq(2)
-        expect(json_response[:meta][:prev_page]).to be_nil
-        expect(json_response[:meta][:total_pages]).to eq(2)
-        expect(json_response[:meta][:total_count]).to eq(10)
-      end
     end
   end
 
   describe "#show" do
-    subject { get :show, params: { id: id } }
+    subject { get :show, params: { id: id, lesson_id: lesson_id } }
 
-    let(:lesson) { create(:lesson, :with_classrooms) }
-    let(:id) { lesson.id }
+    let(:step) { create(:step, lesson: lesson) }
+    let(:id) { step.id }
 
     context "when not logged in" do
       it 'respond with unauthorized and error message' do
@@ -61,13 +53,12 @@ RSpec.describe LessonsController, type: :controller do
         auth_me_please
       end
       context "the id exist" do
-        it 'returns the lesson' do
+        it 'returns the step' do
           subject
-          expect(json_response[:lesson][:id]).to eq(lesson.id)
-          expect(json_response[:lesson][:title]).to eq(lesson.title)
-          expect(json_response[:lesson][:description]).to eq(lesson.description)
-          expect(json_response[:lesson][:creator_id]).to eq(lesson.creator_id)
-          expect(json_response[:lesson][:classrooms]).to eq(lesson.classrooms.pluck(:id))
+          expect(json_response[:step][:id]).to eq(step.id)
+          expect(json_response[:step][:title]).to eq(step.title)
+          expect(json_response[:step][:description]).to eq(step.description)
+          expect(json_response[:step][:lesson_id]).to eq(step.lesson_id)
         end
         it "returns a 200" do
           subject
@@ -79,14 +70,14 @@ RSpec.describe LessonsController, type: :controller do
         it 'respond with not found and message error' do
           subject
           expect(response).to have_http_status(404)
-          expect(json_response[:errors][0][:detail]).to eq("Couldn't find Lesson with 'id'=#{id}")
+          expect(json_response[:errors][0][:detail]).to eq("Couldn't find Step with 'id'=#{id}")
         end
       end
     end
   end
 
   describe "#create" do
-    subject { post :create, params: { lesson: { title: title, description: description } } }
+    subject { post :create, params: { lesson_id: lesson_id, step: { title: title, description: description } } }
 
     let(:title) { Faker::ChuckNorris.fact[0..49] }
     let(:description) { Faker::TwinPeaks.quote }
@@ -102,29 +93,34 @@ RSpec.describe LessonsController, type: :controller do
         auth_me_please
       end
 
+      context "the lesson is not his" do
+        let(:lesson) { create(:lesson) }
+        let(:lesson_id) { lesson.id }
+
+        it 'can\'t create a step' do
+          subject
+          expect(response).to have_http_status(401)
+        end
+      end
+
       it "returns a 201" do
         subject
         expect(response).to have_http_status(201)
       end
 
-      it "returns the new lesson" do
+      it "returns the new step" do
         subject
-        expect(json_response[:lesson][:id]).not_to be_blank
-        expect(json_response[:lesson][:title]).to eq(title)
-        expect(json_response[:lesson][:description]).to eq(description)
+        expect(json_response[:step][:id]).not_to be_blank
+        expect(json_response[:step][:title]).to eq(title)
+        expect(json_response[:step][:description]).to eq(description)
       end
 
-      it "creates the lesson" do
-        expect{ subject }.to change(Lesson, :count).by(1)
+      it "creates the step" do
+        expect{ subject }.to change(Step, :count).by(1)
       end
 
-      it "sets the creator to current_user" do
-        subject
-        expect(json_response[:lesson][:creator_id]).to eq(controller.current_user.id)
-      end
-
-      context "lesson is missing from params" do
-        subject { post :create, params: {} }
+      context "steps is missing from params" do
+        subject { post :create, params: { lesson_id: lesson_id } }
         it "returns a 403" do
           subject
           expect(response).to have_http_status(403)
@@ -132,12 +128,12 @@ RSpec.describe LessonsController, type: :controller do
 
         it "returns a readable error" do
           subject
-          expect(json_response[:errors][0]).to eq("param is missing or the value is empty: lesson")
+          expect(json_response[:errors][0]).to eq("param is missing or the value is empty: step")
         end
       end
 
       context "if title is missing" do
-        subject { post :create, params: { lesson: { title: nil, description: description } } }
+        subject { post :create, params: { step: { title: nil, description: description }, lesson_id: lesson_id } }
         it "returns a 403" do
           subject
           expect(response).to have_http_status(403)
@@ -178,10 +174,10 @@ RSpec.describe LessonsController, type: :controller do
   end
 
   describe "#update" do
-    subject { patch :update, params: { id: id, lesson: params } }
+    let(:step) { create(:step, lesson: lesson) }
+    subject { patch :update, params: { id: id, step: params, lesson_id: lesson_id } }
     let(:params) { { title: title, description: description } }
-    let!(:lesson) { create(:lesson, creator: user) }
-    let(:id) { lesson.id }
+    let(:id) { step.id }
     let(:title) { Faker::ChuckNorris.fact[0..49] }
     let(:description) { Faker::TwinPeaks.quote }
     let(:user) { test_user }
@@ -212,16 +208,16 @@ RSpec.describe LessonsController, type: :controller do
         expect(response).to have_http_status(200)
       end
 
-      it "returns the updated lesson" do
+      it "returns the updated step" do
         subject
-        expect(json_response[:lesson][:id]).to eq(id)
-        expect(json_response[:lesson][:title]).to eq(title)
-        expect(json_response[:lesson][:description]).to eq(description)
+        expect(json_response[:step][:id]).to eq(id)
+        expect(json_response[:step][:title]).to eq(title)
+        expect(json_response[:step][:description]).to eq(description)
       end
 
-      it "updates the lesson" do
-        expect{ subject }.to change{ lesson.reload.title }.to(title).and(
-          change{ lesson.reload.description }.to(description)
+      it "updates the step" do
+        expect{ subject }.to change{ step.reload.title }.to(title).and(
+          change{ step.reload.description }.to(description)
         )
       end
 
@@ -236,14 +232,14 @@ RSpec.describe LessonsController, type: :controller do
   end
 
   describe "#delete" do
-    subject { delete :destroy, params: { id: id } }
+    subject { delete :destroy, params: { id: id, lesson_id: lesson_id } }
 
-    let!(:lesson) { create(:lesson, creator: user) }
-    let(:id) { lesson.id }
+    let!(:step) { create(:step, lesson: lesson) }
+    let(:id) { step.id }
     let(:user) { test_user }
 
     context "user is not logged in" do
-      it 'cannot delete a lesson' do
+      it 'cannot delete a step' do
         subject
         expect(json_response[:errors][0]).to eq("You need to sign in or sign up before continuing.")
         expect(response).to have_http_status(401)
@@ -265,8 +261,8 @@ RSpec.describe LessonsController, type: :controller do
 
       context "the id exist" do
         context "the user is not the creator" do
-          let(:user) { create(:user) }
-          it "can't delete the lesson" do
+          let!(:user) { create(:user) }
+          it "can't delete the step" do
             subject
             expect(response).to have_http_status(401)
           end
@@ -277,15 +273,9 @@ RSpec.describe LessonsController, type: :controller do
             subject
             expect(response).to have_http_status(204)
           end
-          it "delete the lesson" do
+          it "delete the step" do
             subject
             expect(response).to have_http_status(204)
-          end
-          context "the lesson has classroom" do
-            let!(:lesson) { create(:lesson, :with_classrooms, creator: user) }
-            it "delete all classrooms" do
-              expect{ subject }.to change(Classroom, :count).to(0)
-            end
           end
         end
       end
