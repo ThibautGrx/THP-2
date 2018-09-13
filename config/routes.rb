@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   resources :lessons, except: %i[new edit] do
     resources :classrooms, shallow: true
+    resources :steps, shallow: true
   end
 
   resources :classrooms, except: %i[new edit] do
@@ -39,6 +40,12 @@ end
 #                           PATCH  /classrooms/:id(.:format)                                                                classrooms#update
 #                           PUT    /classrooms/:id(.:format)                                                                classrooms#update
 #                           DELETE /classrooms/:id(.:format)                                                                classrooms#destroy
+#              lesson_steps GET    /lessons/:lesson_id/steps(.:format)                                                      steps#index
+#                           POST   /lessons/:lesson_id/steps(.:format)                                                      steps#create
+#                      step GET    /steps/:id(.:format)                                                                     steps#show
+#                           PATCH  /steps/:id(.:format)                                                                     steps#update
+#                           PUT    /steps/:id(.:format)                                                                     steps#update
+#                           DELETE /steps/:id(.:format)                                                                     steps#destroy
 #                   lessons GET    /lessons(.:format)                                                                       lessons#index
 #                           POST   /lessons(.:format)                                                                       lessons#create
 #                    lesson GET    /lessons/:id(.:format)                                                                   lessons#show

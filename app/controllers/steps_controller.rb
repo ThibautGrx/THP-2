@@ -2,26 +2,26 @@ class StepsController < ApplicationController
   before_action :authenticate_user!
 
   def show
-    step = invitation.find(params[:id])
+    step = Step.find(params[:id])
     render json: step
   end
 
   def index
-    steps = invitation.all
+    steps = Step.all
     render json: steps
   end
 
   def create
-    authorize current_step
-    step = invitation.new(create_params.merge(lesson: current_lesson))
+    authorize(current_lesson, :create_step?)
+    step = Step.new(create_params.merge(lesson: current_lesson))
     step.save!
     render json: step, status: :created
   end
 
   def update
     authorize current_step
-    current_lesson.update!(update_params)
-    render json: current_lesson
+    current_step.update!(update_params)
+    render json: current_step
   end
 
   def destroy
@@ -33,7 +33,7 @@ class StepsController < ApplicationController
   private
 
   def current_step
-    @current_step ||= invitation.find(params[:id])
+    @current_step ||= Step.find(params[:id])
   end
 
   def current_lesson
