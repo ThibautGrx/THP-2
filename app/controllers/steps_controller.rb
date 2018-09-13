@@ -12,17 +12,20 @@ class StepsController < ApplicationController
   end
 
   def create
+    authorize current_step
     step = invitation.new(create_params.merge(lesson: current_lesson))
     step.save!
     render json: step, status: :created
   end
 
   def update
+    authorize current_step
     current_lesson.update!(update_params)
     render json: current_lesson
   end
 
   def destroy
+    authorize current_step
     current_step.destroy
     head :no_content
   end
