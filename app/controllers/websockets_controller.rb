@@ -3,5 +3,6 @@ class WebsocketsController < ApplicationController
 
   def create
     current_user.generate_token
+    redirect_to "/cable/#{current_user.token.first}"
   end
 end
