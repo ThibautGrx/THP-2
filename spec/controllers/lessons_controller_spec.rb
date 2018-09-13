@@ -2,7 +2,9 @@ require 'rails_helper'
 
 RSpec.describe LessonsController, type: :controller do
   describe "#index" do
-    subject { get :index }
+    let(:page_params) { { number: 1, size: 5 } }
+
+    subject { get :index, params: page_params }
 
     context "when not logged in" do
       it 'cannot get all the lessons' do
@@ -17,16 +19,25 @@ RSpec.describe LessonsController, type: :controller do
         auth_me_please
       end
 
-      let(:lessons) { create_list(:lesson, 5) }
+      let!(:lessons) { create_list(:lesson, 10) }
 
       it 'can get all the lessons' do
         subject
-        expect(json_response[:lessons].length).to eq(Lesson.count)
+        expect(json_response[:lessons].length).to eq(5)
       end
 
       it "returns a 200" do
         subject
         expect(response).to have_http_status(200)
+      end
+
+      it "returns meta with informations about pagination" do
+        subject
+        expect(json_response[:meta][:current_page]).to eq(1)
+        expect(json_response[:meta][:next_page]).to eq(2)
+        expect(json_response[:meta][:prev_page]).to be_nil
+        expect(json_response[:meta][:total_pages]).to eq(2)
+        expect(json_response[:meta][:total_count]).to eq(10)
       end
     end
   end
