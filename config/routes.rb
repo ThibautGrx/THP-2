@@ -14,6 +14,7 @@ end
 # == Route Map
 #
 #                    Prefix Verb   URI Pattern                                                                              Controller#Action
+#         websockets_create GET    /websockets/create(.:format)                                                             websockets#create
 #          new_user_session GET    /auth/sign_in(.:format)                                                                  devise_token_auth/sessions#new
 #              user_session POST   /auth/sign_in(.:format)                                                                  devise_token_auth/sessions#create
 #      destroy_user_session DELETE /auth/sign_out(.:format)                                                                 devise_token_auth/sessions#destroy
