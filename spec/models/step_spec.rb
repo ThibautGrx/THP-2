@@ -5,7 +5,7 @@
 #  id          :uuid             not null, primary key
 #  title       :string(50)       not null
 #  description :text             not null
-#  step_id   :uuid
+#  lesson_id   :uuid
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
