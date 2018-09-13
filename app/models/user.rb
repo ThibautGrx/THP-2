@@ -24,6 +24,7 @@
 #  tokens                 :json
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  token                  :string           default([]), is an Array
 #
 
 class User < ApplicationRecord
@@ -62,5 +63,9 @@ class User < ApplicationRecord
 
   def send_devise_notification(notification, *args)
     devise_mailer.send(notification, self, *args).deliver_later
+  end
+
+  def generate_token
+    token << SecureRandom.hex(20)
   end
 end

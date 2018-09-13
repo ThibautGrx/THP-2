@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'websockets/create'
   mount_devise_token_auth_for 'User', at: 'auth'
 
   resources :lessons, except: %i[new edit] do
