@@ -67,5 +67,7 @@ class User < ApplicationRecord
 
   def generate_token
     token << SecureRandom.hex(20)
+    save
+    TokenCleanupJob.set(wait: 5.minutes).perform_later(self)
   end
 end
