@@ -11,7 +11,6 @@ Rails.application.configure do
 
   # Show full error reports.
   config.consider_all_requests_local = true
-  config.action_cable.allowed_request_origins = ['http://127.0.0.1:3000/','chrome-extension://pfdhoblngboilpfeibdedpjgfnlcodoo']
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
@@ -63,4 +62,7 @@ Rails.application.configure do
     :port => '2525',
     :authentication => :cram_md5
   }
+  
+  config.action_cable.allowed_request_origins = ['http://127.0.0.1:3000/','chrome-extension://pfdhoblngboilpfeibdedpjgfnlcodoo']
+
 end
