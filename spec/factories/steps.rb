@@ -12,8 +12,8 @@
 
 FactoryBot.define do
   factory :step do
-    title "MyString"
-    description "MyText"
-    lesson nil
+    title { Faker::Beer.name }
+    description { Faker::ChuckNorris.fact }
+    lesson { create(:lesson) }
   end
 end
