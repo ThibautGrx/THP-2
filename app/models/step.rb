@@ -22,4 +22,7 @@ class Step < ApplicationRecord
   #     ticked_steps = self.ticked_steps.select{ |item| item.classroom == classroom }.map(&:user_id)
   #     User.where(id: ticked_steps)
   #   end
+  def completness_percentage
+    classroom.ticked_steps.where(step: self).count / classroom.students.count * 100
+  end
 end
