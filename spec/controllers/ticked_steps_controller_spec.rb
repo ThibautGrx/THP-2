@@ -1,10 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe TickedStepsController, type: :controller do
-  let!(:lesson) { create(:lesson, creator: user) }
-  let!(:classroom) { create(:classroom, creator: user, lesson: lesson) }
+  let!(:lesson) { create(:lesson, creator: teacher) }
+  let!(:classroom) { create(:classroom, creator: teacher, lesson: lesson) }
   let!(:step) { create(:step, lesson: lesson) }
-  let(:user) { test_user }
+  let!(:invitation) { create(:invitation, student: student, classroom: classroom, accepted: true ) }
+  let(:student) { test_user }
+  let(:teacher) { create(:user) }
   let(:classroom_id) { classroom.id }
 
   describe "#index" do
@@ -52,6 +54,10 @@ RSpec.describe TickedStepsController, type: :controller do
         auth_me_please
       end
 
+      let(:message) {
+        "{\"type\":\"STEP_TICKED\",\"value\":{\"lesson_id\":\"#{lesson.id}\",\"step_id\":\"#{step.id}\",\"completness_percentage\":100}}"
+      }
+
       it "returns a 201" do
         subject
         expect(response).to have_http_status(201)
@@ -68,13 +74,16 @@ RSpec.describe TickedStepsController, type: :controller do
       it "creates the ticked_step" do
         expect{ subject }.to change(TickedStep, :count).by(1)
       end
+      it "it broadcast to classroom channel" do
+        expect { subject }.to have_broadcasted_to(classroom).from_channel(ClassroomChannel).with(message)
+      end
     end
   end
 
   describe "#delete" do
     subject { delete :destroy, params: { id: id } }
 
-    let!(:ticked_step) { create(:ticked_step) }
+    let!(:ticked_step) { create(:ticked_step, classroom: classroom, user: student, step: step ) }
     let(:id) { ticked_step.id }
     let(:user) { test_user }
 
@@ -90,6 +99,10 @@ RSpec.describe TickedStepsController, type: :controller do
       before do
         auth_me_please
       end
+
+      let(:message) {
+        "{\"type\":\"STEP_UNTICKED\",\"value\":{\"lesson_id\":\"#{lesson.id}\",\"step_id\":\"#{step.id}\",\"completness_percentage\":0}}"
+      }
 
       context "the id doesn't exist" do
         let(:id) { Faker::Lorem.word }
@@ -107,6 +120,10 @@ RSpec.describe TickedStepsController, type: :controller do
         it "delete the ticked_step" do
           subject
           expect(response).to have_http_status(204)
+        end
+
+        it "it broadcast to classroom channel" do
+          expect { subject }.to have_broadcasted_to(classroom).from_channel(ClassroomChannel).with(message)
         end
       end
     end

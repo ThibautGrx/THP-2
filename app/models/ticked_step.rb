@@ -19,20 +19,20 @@ class TickedStep < ApplicationRecord
   after_destroy :broadcast_to_classroom_delete
 
   def broadcast_to_classroom_create
-    value = { lesson_id: classroom.lesson.id, step_id: step, completness_percentage: step.completness_percentage }.to_json
-    message = {
-      type: "STEP_TICKED",
-      value: value.to_json
-    }.to_json
-    ActionCable.server.broadcast(classroom, message)
+    type = "STEP_TICKED"
+    ClassroomChannel.broadcast_to(classroom, message(type))
   end
 
   def broadcast_to_classroom_delete
-    value = { lesson_id: classroom.lesson.id, step_id: step, completness_percentage: step.completness_percentage }.to_json
-    message = {
-      type: "STEP_UNTICKED",
-      value: value.to_json
+    type = "STEP_UNTICKED"
+    ClassroomChannel.broadcast_to(classroom, message(type))
+  end
+
+  def message(type)
+    value = { lesson_id: classroom.lesson.id, step_id: step.id, completness_percentage: step.completness_percentage(classroom) }
+    {
+      type: type,
+      value: value
     }.to_json
-    ActionCable.server.broadcast(classroom, message)
   end
 end
