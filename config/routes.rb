@@ -74,7 +74,7 @@ end
 #                           PATCH  /classrooms/:id(.:format)                                                                classrooms#update
 #                           PUT    /classrooms/:id(.:format)                                                                classrooms#update
 #                           DELETE /classrooms/:id(.:format)                                                                classrooms#destroy
-#                                  /cable/:token                                                                            #<ActionCable::Server::Base:0x00007f98019a6960 @mutex=#<Monitor:0x00007f98019a6938 @mon_owner=nil, @mon_count=0, @mon_mutex=#<Thread::Mutex:0x00007f98019a68e8>>, @pubsub=nil, @worker_pool=nil, @event_loop=nil, @remote_connections=nil>
+#                                  /cable/:token                                                                            #<ActionCable::Server::Base:0x00007fdf8bdaf2d8 @mutex=#<Monitor:0x00007fdf8bdaf2b0 @mon_owner=nil, @mon_count=0, @mon_mutex=#<Thread::Mutex:0x00007fdf8bdaf260>>, @pubsub=nil, @worker_pool=nil, @event_loop=nil, @remote_connections=nil>
 #        rails_service_blob GET    /rails/active_storage/blobs/:signed_id/*filename(.:format)                               active_storage/blobs#show
 # rails_blob_representation GET    /rails/active_storage/representations/:signed_blob_id/:variation_key/*filename(.:format) active_storage/representations#show
 #        rails_disk_service GET    /rails/active_storage/disk/:encoded_key/*filename(.:format)                              active_storage/disk#show

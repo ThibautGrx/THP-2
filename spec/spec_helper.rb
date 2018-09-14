@@ -9,8 +9,8 @@ if ENV['COVERAGE']
   end
 
   SimpleCov.at_exit do
-    SimpleCov.minimum_coverage_by_file 90
-    SimpleCov.minimum_coverage 90
+    SimpleCov.minimum_coverage_by_file 40
+    SimpleCov.minimum_coverage 95
     SimpleCov.result.format!
   end
 end
