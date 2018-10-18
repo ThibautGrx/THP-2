@@ -50,6 +50,7 @@ group :development do
 end
 
 group :test do
+  gem 'action-cable-testing'
   gem 'faker'
   gem 'shoulda-matchers', '~> 3.0'
 end

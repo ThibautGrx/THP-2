@@ -62,4 +62,7 @@ Rails.application.configure do
     :port => '2525',
     :authentication => :cram_md5
   }
+  
+  config.action_cable.allowed_request_origins = ['http://127.0.0.1:3000/','chrome-extension://pfdhoblngboilpfeibdedpjgfnlcodoo']
+
 end

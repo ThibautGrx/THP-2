@@ -7,6 +7,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'rspec/rails'
 require "pundit/rspec"
 Dir["./spec/support/**/*.rb"].sort.each { |f| require f }
+require "action_cable/testing/rspec"
 
 # Add additional requires below this line. Rails is not loaded until this point!
 

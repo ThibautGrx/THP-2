@@ -24,6 +24,7 @@
 #  tokens                 :json
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  token                  :string           default([]), is an Array
 #
 
 class User < ApplicationRecord
@@ -40,7 +41,7 @@ class User < ApplicationRecord
 
   has_many(:sent_invitations, class_name: 'Invitation', inverse_of: 'teacher', dependent: :destroy, foreign_key: 'teacher_id')
   has_many(:received_invitations, class_name: 'Invitation', inverse_of: 'student', dependent: :destroy, foreign_key: 'student_id',)
-  has_many(:joined_classrooms, -> { where(invitations: { accepted: true }) }, through: :received_invitations, inverse_of: :students, source: :lesson)
+  has_many(:joined_classrooms, -> { where(invitations: { accepted: true }) }, through: :received_invitations, inverse_of: :students, source: :classroom)
 
   has_many :votes, dependent: :destroy
   has_many :upvoted_questions, through: :votes, source: :question
@@ -62,5 +63,11 @@ class User < ApplicationRecord
 
   def send_devise_notification(notification, *args)
     devise_mailer.send(notification, self, *args).deliver_later
+  end
+
+  def generate_token
+    token << SecureRandom.hex(20)
+    save
+    TokenCleanupJob.set(wait: 5.minutes).perform_later(self)
   end
 end

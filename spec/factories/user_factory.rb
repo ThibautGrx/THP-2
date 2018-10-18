@@ -24,6 +24,7 @@
 #  tokens                 :json
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  token                  :string           default([]), is an Array
 #
 
 require 'faker'
